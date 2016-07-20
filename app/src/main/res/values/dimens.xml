@@ -6,7 +6,7 @@
     <!-- Logo -->
     <dimen name="image_view_logo_width">250dp</dimen>
     <dimen name="image_view_logo_height">250dp</dimen>
-    <dimen name="image_view_logo_margin">60dp</dimen>
+    <dimen name="image_view_logo_margin">35dp</dimen>
 
     <!-- Add a goal button -->
     <dimen name="button_add_a_goal_corner_radius">5dp</dimen>
