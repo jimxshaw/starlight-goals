@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--
+        Use the top item if the button is pressed. Use the bottom item if it's not pressed.
+    -->
+    <item android:color="@color/colorAccent" android:state_pressed="true"/>
+    <item android:color="@android:color/black"/>
+</selector>

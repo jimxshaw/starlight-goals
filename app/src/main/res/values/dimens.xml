@@ -2,4 +2,15 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- Logo -->
+    <dimen name="image_view_logo_width">250dp</dimen>
+    <dimen name="image_view_logo_height">250dp</dimen>
+    <dimen name="image_view_logo_margin">60dp</dimen>
+
+    <!-- Add a goal button -->
+    <dimen name="button_add_a_goal_corner_radius">5dp</dimen>
+    <dimen name="button_add_a_goal_margin">24dp</dimen>
+    <dimen name="button_add_a_goal_padding">60dp</dimen>
+    <dimen name="button_add_a_goal_text_size">28sp</dimen>
 </resources>
