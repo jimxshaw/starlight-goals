@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Starlight Goals</string>
+    <string name="string_add_a_goal">Add a goal</string>
 </resources>
