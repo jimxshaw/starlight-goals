@@ -20,7 +20,7 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="@dimen/button_add_a_goal_margin"
         android:background="@drawable/background_button_add_a_goal"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="@string/font_family"
         android:paddingLeft="@dimen/button_add_a_goal_padding"
         android:paddingRight="@dimen/button_add_a_goal_padding"
         android:text="@string/string_add_a_goal"

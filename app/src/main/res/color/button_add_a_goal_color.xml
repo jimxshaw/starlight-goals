@@ -3,6 +3,6 @@
     <!--
         Use the top item if the button is pressed. Use the bottom item if it's not pressed.
     -->
-    <item android:color="@color/colorAccent" android:state_pressed="true"/>
+    <item android:color="@android:color/white" android:state_pressed="true"/>
     <item android:color="@android:color/black"/>
 </selector>
