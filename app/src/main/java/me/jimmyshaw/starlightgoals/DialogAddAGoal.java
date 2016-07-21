@@ -14,6 +14,9 @@ import android.widget.ImageButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import me.jimmyshaw.starlightgoals.models.Goal;
 
 public class DialogAddAGoal extends DialogFragment {
 
@@ -66,8 +69,23 @@ public class DialogAddAGoal extends DialogFragment {
     }
 
     private void performAddAction() {
-        String goal = editTextAddAGoal.getText().toString();
+        // Get the value of the goal. Get the time of when it was added.
+        String goalText = editTextAddAGoal.getText().toString();
+        long dateAdded = System.currentTimeMillis();
 
-        long currentTime = System.currentTimeMillis();
+        RealmConfiguration configuration = new RealmConfiguration.Builder(getActivity()).build();
+        Realm.setDefaultConfiguration(configuration);
+
+        // To use Realm, we have to configure it and then add the configuration to a Realm instance.
+        // Since we already configured Realm on start up in the Application class we can
+        // simply get a Realm instance without issue.
+        Realm realm = Realm.getDefaultInstance();
+        Goal goal = new Goal(dateAdded, 0, goalText, false);
+        // Since copyToRealm is a write instruction, it must be used with a transaction.
+        realm.beginTransaction();
+        realm.copyToRealm(goal);
+        realm.commitTransaction();
+        realm.close();
+
     }
 }
