@@ -1,10 +1,13 @@
 package me.jimmyshaw.starlightgoals.models;
 
+import io.realm.annotations.PrimaryKey;
+
 public class Goal {
     // The reason why dateAdded and dateDue are long types is because their dates will be stored as
     // time-in-milliseconds. It's easier to perform calculations such as find out many days or months
     // are remaining from the user's present until the dateDue. Those calculations are done with the
     // DateUtils class.
+    @PrimaryKey
     private long dateAdded;
     private long dateDue;
     private String goal;
