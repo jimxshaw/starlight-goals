@@ -20,8 +20,20 @@ public class DialogAddAGoal extends DialogFragment {
     @BindView(R.id.image_button_close)
     ImageButton imageButtonClose;
 
-    @OnClick(R.id.image_button_close)
-    public void onClick() {
+    @BindView(R.id.button_add_goal)
+    Button buttonAddGoal;
+
+    @OnClick({R.id.image_button_close, R.id.button_add_goal})
+    public void onButtonClick(View view) {
+        int id = view.getId();
+
+        switch (id) {
+            case R.id.button_add_goal:
+                performAddAction();
+                break;
+        }
+
+        // Exits the entire Add a Goal dialog.
         dismiss();
     }
 
@@ -31,8 +43,6 @@ public class DialogAddAGoal extends DialogFragment {
     @BindView(R.id.date_picker)
     DatePicker datePicker;
 
-    @BindView(R.id.button_add_goal)
-    Button buttonAddGoal;
 
     public DialogAddAGoal() {
 
@@ -53,5 +63,11 @@ public class DialogAddAGoal extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
 
+    }
+
+    private void performAddAction() {
+        String goal = editTextAddAGoal.getText().toString();
+
+        long currentTime = System.currentTimeMillis();
     }
 }
