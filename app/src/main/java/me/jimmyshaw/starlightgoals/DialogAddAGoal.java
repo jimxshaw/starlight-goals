@@ -13,18 +13,17 @@ import android.widget.ImageButton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class DialogAddAGoal extends DialogFragment {
 
     @BindView(R.id.image_button_close)
     ImageButton imageButtonClose;
 
-    private View.OnClickListener closeButtonClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            dismiss();
-        }
-    };
+    @OnClick(R.id.image_button_close)
+    public void onClick() {
+        dismiss();
+    }
 
     @BindView(R.id.edit_text_add_a_goal)
     EditText editTextAddAGoal;
@@ -53,6 +52,6 @@ public class DialogAddAGoal extends DialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        imageButtonClose.setOnClickListener(closeButtonClickListener);
+
     }
 }
