@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,7 +20,7 @@ public class ActivityMain extends AppCompatActivity {
     private View.OnClickListener addListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Toast.makeText(ActivityMain.this, "Add button was clicked!", Toast.LENGTH_SHORT).show();
+            showDialogAddAGoal();
         }
     };
 
@@ -36,5 +35,10 @@ public class ActivityMain extends AppCompatActivity {
 
         buttonAdd.setOnClickListener(addListener);
 
+    }
+
+    private void showDialogAddAGoal() {
+        DialogAddAGoal dialog = new DialogAddAGoal();
+        dialog.show(getSupportFragmentManager(), "Dialog Add a Goal");
     }
 }

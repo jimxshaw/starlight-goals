@@ -30,7 +30,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/text_view_title"
         android:hint="@string/hint"
-        android:padding="@dimen/edit_text_add_a_goal_padding"/>
+        android:padding="@dimen/edit_text_add_a_goal_padding"
+        android:singleLine="true"/>
 
     <DatePicker
         android:id="@+id/date_picker"
