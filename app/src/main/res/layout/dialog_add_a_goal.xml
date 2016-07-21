@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/text_view_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/text_view_title_vertical_margin"
+        android:layout_marginTop="@dimen/text_view_title_vertical_margin"
+        android:text="@string/string_add_a_goal"
+        android:textSize="@dimen/text_view_title_text_size"/>
+
+    <ImageButton
+        android:id="@+id/button_close"
+        android:layout_width="12dp"
+        android:layout_height="12dp"/>
+
+</RelativeLayout>

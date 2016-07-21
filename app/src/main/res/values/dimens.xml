@@ -13,4 +13,6 @@
     <dimen name="button_add_a_goal_margin">24dp</dimen>
     <dimen name="button_add_a_goal_padding">60dp</dimen>
     <dimen name="button_add_a_goal_text_size">28sp</dimen>
+    <dimen name="text_view_title_vertical_margin">36dp</dimen>
+    <dimen name="text_view_title_text_size">18sp</dimen>
 </resources>
