@@ -4,5 +4,8 @@
     <color name="colorPrimaryDark">#FAA000</color>
     <color name="colorAccent">#8BC34A</color>
 
+    <color name="background_recycler_view_row_goal_light">#4AFDD85D</color>
+    <color name="background_recycler_view_row_goal_dark">#BDFDD85D</color>
+
 
 </resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--
+        The pressed state attribute item must be on top or the bottom item will be triggered in
+        all circumstances, including the state being pressed. The order for selectors matters.
+        The most general item should be at the bottom.
+    -->
+    <item android:state_pressed="true">
+        <shape>
+            <solid android:color="@color/background_recycler_view_row_goal_dark"/>
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <solid android:color="@color/background_recycler_view_row_goal_light"/>
+        </shape>
+    </item>
+</selector>
