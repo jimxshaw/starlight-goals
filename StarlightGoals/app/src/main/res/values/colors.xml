@@ -4,6 +4,13 @@
     <color name="colorPrimaryDark">#FAA000</color>
     <color name="colorAccent">#8BC34A</color>
 
+    <!--
+        Calculating opacity values:
+        29% opacity of 255 is about 74.
+        74% opacity of 255 is about 189.
+        Int 74 converted to hex is 4A.
+        Int 189 converted to hex is BD.
+    -->
     <color name="background_recycler_view_row_goal_light">#4AFDD85D</color>
     <color name="background_recycler_view_row_goal_dark">#BDFDD85D</color>
 
