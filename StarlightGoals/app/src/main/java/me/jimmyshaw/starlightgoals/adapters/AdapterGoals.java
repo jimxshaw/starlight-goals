@@ -2,6 +2,7 @@ package me.jimmyshaw.starlightgoals.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import butterknife.ButterKnife;
 import me.jimmyshaw.starlightgoals.R;
 
 public class AdapterGoals extends RecyclerView.Adapter<AdapterGoals.GoalHolder> {
+
+    public static final String TAG = "Jim";
 
     Context context;
 
@@ -45,6 +48,8 @@ public class AdapterGoals extends RecyclerView.Adapter<AdapterGoals.GoalHolder> 
         // the inflater every time. So make the inflater a class member variable.
         View view = inflater.inflate(R.layout.recycler_view_row_goal, parent, false);
 
+        Log.d(TAG, "onCreateViewHolder: ");
+
         GoalHolder goalHolder = new GoalHolder(view);
 
         return goalHolder;
@@ -53,6 +58,7 @@ public class AdapterGoals extends RecyclerView.Adapter<AdapterGoals.GoalHolder> 
     @Override
     public void onBindViewHolder(GoalHolder holder, int position) {
         holder.textViewGoalText.setText(items.get(position));
+        Log.d(TAG, "onBindViewHolder: " + position);
     }
 
     @Override
