@@ -2,6 +2,7 @@ package me.jimmyshaw.starlightgoals;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.Button;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.jimmyshaw.starlightgoals.adapters.AdapterGoals;
 
 public class ActivityMain extends AppCompatActivity {
 
@@ -38,6 +40,10 @@ public class ActivityMain extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         buttonAdd.setOnClickListener(addListener);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(new AdapterGoals(this));
 
     }
 
