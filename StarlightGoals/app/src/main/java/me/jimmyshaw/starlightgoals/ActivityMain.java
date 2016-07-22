@@ -23,6 +23,8 @@ public class ActivityMain extends AppCompatActivity {
 
     Realm realm;
 
+    AdapterGoals adapterGoals;
+
     RealmResults<Goal> realmResults;
 
     @BindView(R.id.toolbar)
@@ -45,6 +47,7 @@ public class ActivityMain extends AppCompatActivity {
         @Override
         public void onChange(Object element) {
             Log.d(TAG, "onChange: ");
+            adapterGoals.update(realmResults);
         }
     };
 
@@ -69,7 +72,8 @@ public class ActivityMain extends AppCompatActivity {
         buttonAdd.setOnClickListener(addListener);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new AdapterGoals(this, realmResults));
+        adapterGoals = new AdapterGoals(this, realmResults);
+        recyclerView.setAdapter(adapterGoals);
 
     }
 

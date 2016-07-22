@@ -26,11 +26,17 @@ public class AdapterGoals extends RecyclerView.Adapter<AdapterGoals.GoalHolder> 
 
     public AdapterGoals(Context context, RealmResults<Goal> realmResults) {
         this.context = context;
-
-        this.realmResults = realmResults;
-
         inflater = LayoutInflater.from(context);
 
+        update(realmResults);
+
+    }
+
+    public void update(RealmResults<Goal> realmResults) {
+        // Our main activity will call this adapter's update method by passing in a new realm results
+        // collection. This in turn will update each row bound by the view holder.
+        this.realmResults = realmResults;
+        notifyDataSetChanged();
     }
 
     @Override
