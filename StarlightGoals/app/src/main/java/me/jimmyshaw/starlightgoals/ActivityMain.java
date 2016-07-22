@@ -11,7 +11,6 @@ import android.widget.Button;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 import me.jimmyshaw.starlightgoals.adapters.AdapterGoals;
 import me.jimmyshaw.starlightgoals.models.Goal;
@@ -53,7 +52,7 @@ public class ActivityMain extends AppCompatActivity {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new AdapterGoals(this));
+        recyclerView.setAdapter(new AdapterGoals(this, realmResults));
 
     }
 

@@ -8,11 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.RealmResults;
 import me.jimmyshaw.starlightgoals.R;
+import me.jimmyshaw.starlightgoals.models.Goal;
 
 public class AdapterGoals extends RecyclerView.Adapter<AdapterGoals.GoalHolder> {
 
@@ -22,23 +22,14 @@ public class AdapterGoals extends RecyclerView.Adapter<AdapterGoals.GoalHolder> 
 
     private LayoutInflater inflater;
 
-    private ArrayList<String> items = new ArrayList<>();
+    private RealmResults<Goal> realmResults;
 
-    public AdapterGoals(Context context) {
+    public AdapterGoals(Context context, RealmResults<Goal> realmResults) {
         this.context = context;
 
+        this.realmResults = realmResults;
+
         inflater = LayoutInflater.from(context);
-
-        items = generateValues();
-    }
-
-    public static ArrayList<String> generateValues() {
-        ArrayList<String> dummyValues = new ArrayList<>();
-        for (int i = 1; i < 101; i++) {
-            dummyValues.add("Item " + i);
-        }
-
-        return dummyValues;
 
     }
 
@@ -57,13 +48,15 @@ public class AdapterGoals extends RecyclerView.Adapter<AdapterGoals.GoalHolder> 
 
     @Override
     public void onBindViewHolder(GoalHolder holder, int position) {
-        holder.textViewGoalText.setText(items.get(position));
+        Goal goal = realmResults.get(position);
+
+        holder.textViewGoalText.setText(goal.getGoal());
         Log.d(TAG, "onBindViewHolder: " + position);
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return realmResults.size();
     }
 
 
