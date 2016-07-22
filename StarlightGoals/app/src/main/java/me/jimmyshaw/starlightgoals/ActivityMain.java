@@ -10,9 +10,15 @@ import android.widget.Button;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 import me.jimmyshaw.starlightgoals.adapters.AdapterGoals;
+import me.jimmyshaw.starlightgoals.models.Goal;
 
 public class ActivityMain extends AppCompatActivity {
+
+    Realm realm;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -38,6 +44,10 @@ public class ActivityMain extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
+
+        realm = Realm.getDefaultInstance();
+
+        RealmResults<Goal> realmResults = realm.where(Goal.class).findAllAsync();
 
         buttonAdd.setOnClickListener(addListener);
 

@@ -73,11 +73,8 @@ public class DialogAddAGoal extends DialogFragment {
         String goalText = editTextAddAGoal.getText().toString();
         long dateAdded = System.currentTimeMillis();
 
-        RealmConfiguration configuration = new RealmConfiguration.Builder(getActivity()).build();
-        Realm.setDefaultConfiguration(configuration);
-
         // To use Realm, we have to configure it and then add the configuration to a Realm instance.
-        // Since we already configured Realm on start up in the Application class we can
+        // Since we already configured Realm on start up in the Application configuration class we can
         // simply get a Realm instance without issue.
         Realm realm = Realm.getDefaultInstance();
         Goal goal = new Goal(dateAdded, 0, goalText, false);
