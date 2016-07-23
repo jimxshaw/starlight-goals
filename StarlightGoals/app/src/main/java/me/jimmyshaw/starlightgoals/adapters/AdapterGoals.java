@@ -2,10 +2,10 @@ package me.jimmyshaw.starlightgoals.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -14,7 +14,7 @@ import io.realm.RealmResults;
 import me.jimmyshaw.starlightgoals.R;
 import me.jimmyshaw.starlightgoals.models.Goal;
 
-public class AdapterGoals extends RecyclerView.Adapter<AdapterGoals.GoalHolder> {
+public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static final String TAG = "Jim";
 
@@ -23,6 +23,12 @@ public class AdapterGoals extends RecyclerView.Adapter<AdapterGoals.GoalHolder> 
     private LayoutInflater inflater;
 
     private RealmResults<Goal> realmResults;
+
+    // These arbitrary ints label the view types that are in our recycler view. We only have two
+    // types in this case, either a row item or it's the footer. The view type ints will be used
+    // in onCreateViewHolder.
+    public static final int ROW_ITEM = 0;
+    public static final int FOOTER = 1;
 
     public AdapterGoals(Context context, RealmResults<Goal> realmResults) {
         this.context = context;
@@ -40,29 +46,56 @@ public class AdapterGoals extends RecyclerView.Adapter<AdapterGoals.GoalHolder> 
     }
 
     @Override
-    public GoalHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // This onCreateViewHolder method will be called repeatedly and we don't want to instantiate
-        // the inflater every time. So make the inflater a class member variable.
-        View view = inflater.inflate(R.layout.recycler_view_row_goal, parent, false);
-
-        Log.d(TAG, "onCreateViewHolder: ");
-
-        GoalHolder goalHolder = new GoalHolder(view);
-
-        return goalHolder;
+    public int getItemViewType(int position) {
+        // What type of item view within our recycler view are we dealing with? Is it a row item or
+        // is it the footer? This method determines that and the int will be passed into the
+        // onCreateViewHolder method.
+        if (realmResults == null || position < realmResults.size()) {
+            return ROW_ITEM;
+        }
+        else {
+            return FOOTER;
+        }
     }
 
     @Override
-    public void onBindViewHolder(GoalHolder holder, int position) {
-        Goal goal = realmResults.get(position);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // This onCreateViewHolder method will be called repeatedly and we don't want to instantiate
+        // the inflater every time. So make the inflater a class member variable.
+        // We inflate either the footer holder or the goal holder depending on which viewType int
+        // is passed in from getItemViewType.
+        if (viewType == FOOTER) {
+            View view = inflater.inflate(R.layout.recycler_view_footer, parent, false);
 
-        holder.textViewGoalText.setText(goal.getGoal());
-        Log.d(TAG, "onBindViewHolder: " + position);
+            return new FooterHolder(view);
+        }
+        else {
+            View view = inflater.inflate(R.layout.recycler_view_row_goal, parent, false);
+
+            return new GoalHolder(view);
+        }
+
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        // We pass into this method a general view holder. If the view holder is of type GoalHolder
+        // then get a Goal object, by its position, from our collection and set the goalText property
+        // to the goal text view.
+        // If the view holder is another type, like FooterHolder, we do nothing because this would
+        // mean our collection has no Goal objects to display.
+        if (holder instanceof GoalHolder) {
+            GoalHolder goalHolder = (GoalHolder) holder;
+            Goal goal = realmResults.get(position);
+            goalHolder.textViewGoalText.setText(goal.getGoal());
+        }
     }
 
     @Override
     public int getItemCount() {
-        return realmResults.size();
+        // The actual item count is how many goals are in our realm results + 1. That plus 1 represents
+        // our footer.
+        return realmResults.size() + FOOTER;
     }
 
 
@@ -72,6 +105,17 @@ public class AdapterGoals extends RecyclerView.Adapter<AdapterGoals.GoalHolder> 
         TextView textViewGoalText;
 
         public GoalHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
+
+    public static class FooterHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.button_footer)
+        Button buttonFooter;
+
+        public FooterHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
