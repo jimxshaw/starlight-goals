@@ -29,32 +29,32 @@ public class CustomRecyclerView extends RecyclerView {
     private AdapterDataObserver adapterDataObserver = new AdapterDataObserver() {
         @Override
         public void onChanged() {
-
+            updateViews();
         }
 
         @Override
         public void onItemRangeChanged(int positionStart, int itemCount) {
-
+            updateViews();
         }
 
         @Override
         public void onItemRangeChanged(int positionStart, int itemCount, Object payload) {
-
+            updateViews();
         }
 
         @Override
         public void onItemRangeInserted(int positionStart, int itemCount) {
-
+            updateViews();
         }
 
         @Override
         public void onItemRangeRemoved(int positionStart, int itemCount) {
-
+            updateViews();
         }
 
         @Override
         public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
-
+            updateViews();
         }
     };
 
@@ -96,5 +96,47 @@ public class CustomRecyclerView extends RecyclerView {
         // If our recycler view is empty, meaning no data, show these views. The views we show
         // are the views meant for when our recycler view has no data.
         viewsToShowWhenRecyclerViewIsEmpty = Arrays.asList(views);
+    }
+
+    private void updateViews() {
+        // We must check 1) if an adapter has already been set first and 2) that our two arrays
+        // containing views we'd like to hide or show have at least one view in each array.
+        if (getAdapter() != null && !viewsToShowWhenRecyclerViewHasData.isEmpty() && !viewsToShowWhenRecyclerViewIsEmpty.isEmpty()) {
+            // Next we check if our adapter count is zero. If it's zero then we know our recycler
+            // view is empty, otherwise it has at least one item in it.
+            if (getAdapter().getItemCount() == 0) {
+
+                // Show all the views that are meant to be shown under this condition.
+                for (View view : viewsToShowWhenRecyclerViewIsEmpty) {
+                    view.setVisibility(View.VISIBLE);
+                }
+
+                // Remove the recycler view. If there's no data, the entire recycler view including
+                // its structure will not exist by using GONE. The difference between GONE and
+                // INVISIBLE is that using INVISIBLE will make the content invisible but the widget's
+                // structure will still be there.
+                setVisibility(View.GONE);
+
+                // Remove all the views that are meant to be hidden under this condition.
+                for (View view : viewsToShowWhenRecyclerViewHasData) {
+                    view.setVisibility(View.GONE);
+                }
+            }
+            else {
+
+                // Show all the views that are meant to be shown under this condition.
+                for (View view : viewsToShowWhenRecyclerViewHasData) {
+                    view.setVisibility(View.VISIBLE);
+                }
+
+                // Show the recycler view.
+                setVisibility(View.VISIBLE);
+
+                // Remove all the views that are meant to be hidden under this condition.
+                for (View view : viewsToShowWhenRecyclerViewIsEmpty) {
+                    view.setVisibility(View.GONE);
+                }
+            }
+        }
     }
 }
