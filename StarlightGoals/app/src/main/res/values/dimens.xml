@@ -25,5 +25,9 @@
     <!-- Add a goal edit text -->
     <dimen name="edit_text_add_a_goal_padding">16dp</dimen>
 
+    <!-- Footer add a goal -->
+    <dimen name="footer_add_a_goal_margin_vertical">128dp</dimen>
+    <dimen name="footer_add_a_goal_margin_horizontal">60dp</dimen>
+
 
 </resources>
