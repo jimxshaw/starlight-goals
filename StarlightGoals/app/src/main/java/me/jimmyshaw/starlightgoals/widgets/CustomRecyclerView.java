@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import me.jimmyshaw.starlightgoals.utilities.Util;
+
 // This is a custom recycler view class that behaves differently from the normal recycler view.
 public class CustomRecyclerView extends RecyclerView {
 
@@ -107,9 +109,7 @@ public class CustomRecyclerView extends RecyclerView {
             if (getAdapter().getItemCount() == 0) {
 
                 // Show all the views that are meant to be shown under this condition.
-                for (View view : viewsToShowWhenRecyclerViewIsEmpty) {
-                    view.setVisibility(View.VISIBLE);
-                }
+                Util.showViews(viewsToShowWhenRecyclerViewIsEmpty);
 
                 // Remove the recycler view. If there's no data, the entire recycler view including
                 // its structure will not exist by using GONE. The difference between GONE and
@@ -118,24 +118,18 @@ public class CustomRecyclerView extends RecyclerView {
                 setVisibility(View.GONE);
 
                 // Remove all the views that are meant to be hidden under this condition.
-                for (View view : viewsToShowWhenRecyclerViewHasData) {
-                    view.setVisibility(View.GONE);
-                }
+                Util.hideViews(viewsToShowWhenRecyclerViewHasData);
             }
             else {
 
                 // Show all the views that are meant to be shown under this condition.
-                for (View view : viewsToShowWhenRecyclerViewHasData) {
-                    view.setVisibility(View.VISIBLE);
-                }
+                Util.showViews(viewsToShowWhenRecyclerViewHasData);
 
                 // Show the recycler view.
                 setVisibility(View.VISIBLE);
 
                 // Remove all the views that are meant to be hidden under this condition.
-                for (View view : viewsToShowWhenRecyclerViewIsEmpty) {
-                    view.setVisibility(View.GONE);
-                }
+                Util.hideViews(viewsToShowWhenRecyclerViewIsEmpty);
             }
         }
     }
