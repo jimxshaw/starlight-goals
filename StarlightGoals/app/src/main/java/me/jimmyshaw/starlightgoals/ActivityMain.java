@@ -3,7 +3,6 @@ package me.jimmyshaw.starlightgoals;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +15,7 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import me.jimmyshaw.starlightgoals.adapters.AdapterGoals;
 import me.jimmyshaw.starlightgoals.models.Goal;
+import me.jimmyshaw.starlightgoals.widgets.CustomRecyclerView;
 
 public class ActivityMain extends AppCompatActivity {
 
@@ -34,7 +34,10 @@ public class ActivityMain extends AppCompatActivity {
     Button buttonAdd;
 
     @BindView(R.id.recycler_view_goals)
-    RecyclerView recyclerView;
+    CustomRecyclerView recyclerView;
+
+    @BindView(R.id.empty_goals)
+    View viewEmptyGoals;
 
     private View.OnClickListener addListener = new View.OnClickListener() {
         @Override
@@ -71,6 +74,8 @@ public class ActivityMain extends AppCompatActivity {
 
         buttonAdd.setOnClickListener(addListener);
 
+        recyclerView.hideIfEmpty(toolbar);
+        recyclerView.showIfEmpty(viewEmptyGoals);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapterGoals = new AdapterGoals(this, realmResults);
         recyclerView.setAdapter(adapterGoals);
