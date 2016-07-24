@@ -12,4 +12,5 @@
     android:fontFamily="@string/font_family"
     android:text="@string/string_add_a_goal"
     android:textAllCaps="false"
+    android:textColor="@color/button_add_a_goal_color"
     android:textSize="@dimen/button_add_a_goal_text_size"/>
