@@ -91,8 +91,7 @@ public class ActivityMain extends AppCompatActivity {
         recyclerView.hideIfEmpty(toolbar);
         recyclerView.showIfEmpty(viewEmptyGoals);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapterGoals = new AdapterGoals(this, realmResults);
-        adapterGoals.setAddListener(addListener);
+        adapterGoals = new AdapterGoals(this, realmResults, addListener);
         recyclerView.setAdapter(adapterGoals);
 
     }

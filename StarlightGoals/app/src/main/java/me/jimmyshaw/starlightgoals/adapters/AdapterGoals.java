@@ -33,16 +33,14 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static final int ROW_ITEM = 0;
     public static final int FOOTER = 1;
 
-    public AdapterGoals(Context context, RealmResults<Goal> realmResults) {
+    public AdapterGoals(Context context, RealmResults<Goal> realmResults, AddListener addListener) {
         this.context = context;
+        this.addListener = addListener;
+
         inflater = LayoutInflater.from(context);
 
         update(realmResults);
 
-    }
-
-    public void setAddListener(AddListener addListener) {
-        this.addListener = addListener;
     }
 
     public void update(RealmResults<Goal> realmResults) {
@@ -74,7 +72,7 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         if (viewType == FOOTER) {
             View view = inflater.inflate(R.layout.recycler_view_footer, parent, false);
 
-            return new FooterHolder(view);
+            return new FooterHolder(view, addListener);
         }
         else {
             View view = inflater.inflate(R.layout.recycler_view_row_goal, parent, false);
@@ -117,19 +115,23 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
-    public class FooterHolder extends RecyclerView.ViewHolder {
+    public static class FooterHolder extends RecyclerView.ViewHolder {
+
+        private AddListener listener;
 
         @BindView(R.id.button_footer)
         Button buttonFooter;
 
         @OnClick(R.id.button_footer)
         public void onClick() {
-            addListener.add();
+            listener.add();
         }
 
-        public FooterHolder(View itemView) {
+        public FooterHolder(View itemView, AddListener addListener) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            listener = addListener;
         }
     }
 }
