@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.realm.RealmResults;
 import me.jimmyshaw.starlightgoals.R;
 import me.jimmyshaw.starlightgoals.models.Goal;
@@ -24,6 +25,8 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private RealmResults<Goal> realmResults;
 
+    private AddListener addListener;
+
     // These arbitrary ints label the view types that are in our recycler view. We only have two
     // types in this case, either a row item or it's the footer. The view type ints will be used
     // in onCreateViewHolder.
@@ -36,6 +39,10 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         update(realmResults);
 
+    }
+
+    public void setAddListener(AddListener addListener) {
+        this.addListener = addListener;
     }
 
     public void update(RealmResults<Goal> realmResults) {
@@ -110,10 +117,15 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
-    public static class FooterHolder extends RecyclerView.ViewHolder {
+    public class FooterHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.button_footer)
         Button buttonFooter;
+
+        @OnClick(R.id.button_footer)
+        public void onClick() {
+            addListener.add();
+        }
 
         public FooterHolder(View itemView) {
             super(itemView);

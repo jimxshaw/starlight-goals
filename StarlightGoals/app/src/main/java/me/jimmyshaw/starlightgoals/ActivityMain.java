@@ -14,6 +14,7 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import me.jimmyshaw.starlightgoals.adapters.AdapterGoals;
+import me.jimmyshaw.starlightgoals.adapters.AddListener;
 import me.jimmyshaw.starlightgoals.models.Goal;
 import me.jimmyshaw.starlightgoals.utilities.CustomRecyclerViewDivider;
 import me.jimmyshaw.starlightgoals.widgets.CustomRecyclerView;
@@ -40,9 +41,20 @@ public class ActivityMain extends AppCompatActivity {
     @BindView(R.id.empty_goals)
     View viewEmptyGoals;
 
-    private View.OnClickListener addListener = new View.OnClickListener() {
+    // This listener is specific to the Add button on our main activity.
+    private View.OnClickListener buttonAddAGoalListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            showDialogAddAGoal();
+        }
+    };
+
+    // This listener interface implementation is specific to the Add button in our recycler
+    // view's footer view holder. We pass this listener as an argument in our adapter's
+    // constructor whenever we instantiate it.
+    private AddListener addListener = new AddListener() {
+        @Override
+        public void add() {
             showDialogAddAGoal();
         }
     };
@@ -73,13 +85,14 @@ public class ActivityMain extends AppCompatActivity {
 
         realmResults = realm.where(Goal.class).findAllAsync();
 
-        buttonAdd.setOnClickListener(addListener);
+        buttonAdd.setOnClickListener(buttonAddAGoalListener);
 
         recyclerView.addItemDecoration(new CustomRecyclerViewDivider(this, LinearLayoutManager.VERTICAL));
         recyclerView.hideIfEmpty(toolbar);
         recyclerView.showIfEmpty(viewEmptyGoals);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapterGoals = new AdapterGoals(this, realmResults);
+        adapterGoals.setAddListener(addListener);
         recyclerView.setAdapter(adapterGoals);
 
     }
