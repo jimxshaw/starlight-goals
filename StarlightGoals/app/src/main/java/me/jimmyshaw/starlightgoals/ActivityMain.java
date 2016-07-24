@@ -15,6 +15,7 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import me.jimmyshaw.starlightgoals.adapters.AdapterGoals;
 import me.jimmyshaw.starlightgoals.models.Goal;
+import me.jimmyshaw.starlightgoals.utilities.CustomRecyclerViewDivider;
 import me.jimmyshaw.starlightgoals.widgets.CustomRecyclerView;
 
 public class ActivityMain extends AppCompatActivity {
@@ -74,6 +75,7 @@ public class ActivityMain extends AppCompatActivity {
 
         buttonAdd.setOnClickListener(addListener);
 
+        recyclerView.addItemDecoration(new CustomRecyclerViewDivider(this, LinearLayoutManager.VERTICAL));
         recyclerView.hideIfEmpty(toolbar);
         recyclerView.showIfEmpty(viewEmptyGoals);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
