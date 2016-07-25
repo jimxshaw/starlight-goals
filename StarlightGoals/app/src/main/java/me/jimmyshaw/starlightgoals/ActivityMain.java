@@ -26,6 +26,8 @@ public class ActivityMain extends AppCompatActivity {
 
     public static final String TAG = "Jim";
 
+    public static final String ARG_POSITION = "POSITION";
+
     Realm realm;
 
     AdapterGoals adapterGoals;
@@ -83,7 +85,15 @@ public class ActivityMain extends AppCompatActivity {
     }
 
     private void showDialogCompleteThisGoal(int position) {
+        // This method is called when the user clicks on a particular row item and wants to mark it
+        // complete in the dialog complete this goal fragment. How does the dialog know which row
+        // item to mark as complete? That's why we have to pass in to this method the row item's
+        // position as a bundle argument. Our dialog fragment will get out this bundle argument and
+        // process it accordingly.
         DialogCompleteThisGoal dialog = new DialogCompleteThisGoal();
+        Bundle bundle = new Bundle();
+        bundle.putInt(ARG_POSITION, position);
+        dialog.setArguments(bundle);
         dialog.show(getSupportFragmentManager(), "Dialog Complete This Goal");
     }
 

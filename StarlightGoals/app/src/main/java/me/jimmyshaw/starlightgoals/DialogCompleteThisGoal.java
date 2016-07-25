@@ -8,12 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class DialogCompleteThisGoal extends DialogFragment {
+
+    public static final String ARG_POSITION = "POSITION";
 
     @BindView(R.id.image_button_close)
     ImageButton buttonClose;
@@ -42,5 +45,17 @@ public class DialogCompleteThisGoal extends DialogFragment {
         ButterKnife.bind(this, view);
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Bundle arguments = getArguments();
+
+        if (arguments != null) {
+            int position = arguments.getInt(ARG_POSITION);
+            Toast.makeText(getActivity(), "Row position " + position, Toast.LENGTH_SHORT).show();
+        }
     }
 }
