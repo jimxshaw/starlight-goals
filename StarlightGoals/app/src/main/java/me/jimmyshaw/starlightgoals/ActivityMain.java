@@ -16,7 +16,7 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import me.jimmyshaw.starlightgoals.adapters.AdapterGoals;
 import me.jimmyshaw.starlightgoals.adapters.AddListener;
-import me.jimmyshaw.starlightgoals.adapters.CompleteListener;
+import me.jimmyshaw.starlightgoals.adapters.DetailListener;
 import me.jimmyshaw.starlightgoals.adapters.SimpleTouchCallback;
 import me.jimmyshaw.starlightgoals.models.Goal;
 import me.jimmyshaw.starlightgoals.utilities.CustomRecyclerViewDivider;
@@ -64,9 +64,9 @@ public class ActivityMain extends AppCompatActivity {
         }
     };
 
-    private CompleteListener completeListener = new CompleteListener() {
+    private DetailListener detailListener = new DetailListener() {
         @Override
-        public void onComplete(int position) {
+        public void onClick(int position) {
             showDialogCompleteThisGoal(position);
         }
     };
@@ -86,7 +86,7 @@ public class ActivityMain extends AppCompatActivity {
 
     private void showDialogCompleteThisGoal(int position) {
         // This method is called when the user clicks on a particular row item and wants to mark it
-        // complete in the dialog complete this goal fragment. How does the dialog know which row
+        // complete in the DialogCompleteThisGoal fragment. How does the dialog know which row
         // item to mark as complete? That's why we have to pass in to this method the row item's
         // position as a bundle argument. Our dialog fragment will get out this bundle argument and
         // process it accordingly.
@@ -116,7 +116,7 @@ public class ActivityMain extends AppCompatActivity {
         recyclerView.hideIfEmpty(toolbar);
         recyclerView.showIfEmpty(viewEmptyGoals);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapterGoals = new AdapterGoals(this, realm, realmResults, addListener, completeListener);
+        adapterGoals = new AdapterGoals(this, realm, realmResults, addListener, detailListener);
         recyclerView.setAdapter(adapterGoals);
 
         // Our adapter implements SwipeListener and so we simply pass that into the constructor.

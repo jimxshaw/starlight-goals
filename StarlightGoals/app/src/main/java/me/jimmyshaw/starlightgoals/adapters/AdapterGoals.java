@@ -29,7 +29,7 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private RealmResults<Goal> realmResults;
 
     private AddListener addListener;
-    private CompleteListener completeListener;
+    private DetailListener detailListener;
 
     // These arbitrary ints label the view types that are in our recycler view. We only have two
     // types in this case, either a row item or it's the footer. The view type ints will be used
@@ -37,10 +37,10 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static final int ROW_ITEM = 0;
     public static final int FOOTER = 1;
 
-    public AdapterGoals(Context context, Realm realm, RealmResults<Goal> realmResults, AddListener addListener, CompleteListener completeListener) {
+    public AdapterGoals(Context context, Realm realm, RealmResults<Goal> realmResults, AddListener addListener, DetailListener detailListener) {
         this.context = context;
         this.addListener = addListener;
-        this.completeListener = completeListener;
+        this.detailListener = detailListener;
         inflater = LayoutInflater.from(context);
         this.realm = realm;
 
@@ -97,7 +97,7 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         else {
             View view = inflater.inflate(R.layout.recycler_view_row_goal, parent, false);
 
-            return new GoalHolder(view, completeListener);
+            return new GoalHolder(view, detailListener);
         }
 
     }
@@ -139,20 +139,20 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         @BindView(R.id.text_view_date_due)
         TextView textViewDateDue;
 
-        private CompleteListener listener;
+        private DetailListener listener;
 
-        public GoalHolder(View itemView, CompleteListener completeListener) {
+        public GoalHolder(View itemView, DetailListener detailListener) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
-            listener = completeListener;
+            listener = detailListener;
 
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            listener.onComplete(getAdapterPosition());
+            listener.onClick(getAdapterPosition());
         }
     }
 

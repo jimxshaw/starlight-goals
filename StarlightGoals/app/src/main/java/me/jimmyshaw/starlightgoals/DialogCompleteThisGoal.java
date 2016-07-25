@@ -30,11 +30,25 @@ public class DialogCompleteThisGoal extends DialogFragment {
 
         switch (id) {
             case R.id.button_complete_this_goal:
-                //TODO: Handle action to mark the row item as complete.
+                completeThisGoal();
                 break;
         }
 
         dismiss();
+    }
+
+    public void completeThisGoal() {
+        // This method finds out which row item in the recycler view adapter was clicked and then
+        // mark that row item as complete. We need to know the row item goal object at the exact
+        // position where the dialog is being shown. We have to communicate between this dialog
+        // fragment and AdapterGoals in some way. As usual, we'll use a listener interface this time
+        // called DetailListener that has a method called onClick that actually marks the row
+        // item as complete. The implementation for onClick takes place in ActivityMain but
+        // we get access to it because we pass this listener in with the setCompleteListener method.
+
+        // The bundle arguments that we're getting is the recycler view row item's position integer.
+        // We'll use this position int to be able to mark that particular row item as completed.
+
     }
 
     @Nullable
