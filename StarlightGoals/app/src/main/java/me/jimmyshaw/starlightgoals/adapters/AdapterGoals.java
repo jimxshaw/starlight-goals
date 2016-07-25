@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -148,10 +149,6 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
 
-
-
-
-
     public static class GoalHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.text_view_goal_text)
@@ -184,7 +181,14 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
 
         public void setDateDue(long dateDue) {
-            textViewDateDue.setText(String.valueOf(dateDue));
+            // The third parameter of getRelativeTimeSpanString is called minResolution, which is the
+            // minimum about of time period that we'd like notify the user. Day is a perfect time
+            // period. When a goal is due today, the text will display today.
+            textViewDateDue.setText(DateUtils.getRelativeTimeSpanString(
+                    dateDue,
+                    System.currentTimeMillis(),
+                    DateUtils.DAY_IN_MILLIS,
+                    DateUtils.FORMAT_ABBREV_ALL));
         }
 
         public void setBackground(Boolean isCompleted) {
@@ -206,10 +210,6 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             listener.onClick(getAdapterPosition());
         }
     }
-
-
-
-
 
 
     public static class FooterHolder extends RecyclerView.ViewHolder {
