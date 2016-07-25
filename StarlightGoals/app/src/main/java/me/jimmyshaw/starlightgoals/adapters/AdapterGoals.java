@@ -118,7 +118,14 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public int getItemCount() {
         // The actual item count is how many goals are in our realm results + 1. That plus 1 represents
         // our footer.
-        return realmResults.size() + FOOTER;
+        // Obviously when our realm database has no goals displaying the footer wouldn't make sense.
+        // So in that situation, we display the empty goals layout, which is our main activity layout.
+        if (realmResults == null || realmResults.isEmpty()) {
+            return 0;
+        }
+        else {
+            return realmResults.size() + FOOTER;
+        }
     }
 
 
