@@ -16,7 +16,6 @@
         android:background="@android:color/transparent"
         android:drawablePadding="@dimen/button_complete_this_goal_padding"
         android:drawableTop="@drawable/ic_polaris"
-        android:fontFamily="@string/font_family"
         android:text="@string/string_complete_this_star"
         android:textAllCaps="false"
         android:textSize="@dimen/button_add_a_goal_text_size"/>

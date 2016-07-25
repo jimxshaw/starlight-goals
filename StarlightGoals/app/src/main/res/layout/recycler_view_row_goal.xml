@@ -19,7 +19,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:fontFamily="@string/font_family"
         android:paddingLeft="22dp"
         android:paddingRight="22dp"
         android:paddingTop="2dp"
@@ -29,7 +28,6 @@
         android:id="@+id/text_view_date_due"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@string/font_family"
         android:paddingTop="2dp"
         android:text="Date Due"/>
 
