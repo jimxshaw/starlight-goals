@@ -128,6 +128,7 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             Goal goal = realmResults.get(position);
 
             goalHolder.setGoalText(goal.getGoal());
+            goalHolder.setDateDue(goal.getDateDue());
             goalHolder.setBackground(goal.isCompleted());
         }
     }
@@ -145,6 +146,10 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             return realmResults.size() + FOOTER;
         }
     }
+
+
+
+
 
 
     public static class GoalHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -178,6 +183,10 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             textViewGoalText.setText(goalText);
         }
 
+        public void setDateDue(long dateDue) {
+            textViewDateDue.setText(String.valueOf(dateDue));
+        }
+
         public void setBackground(Boolean isCompleted) {
             // Depending on whether or not the row item is completed, a different drawable will be
             // returned. The returned drawable has to be set to a view and that view is the row item's
@@ -197,6 +206,11 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             listener.onClick(getAdapterPosition());
         }
     }
+
+
+
+
+
 
     public static class FooterHolder extends RecyclerView.ViewHolder {
 
