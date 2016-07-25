@@ -5,4 +5,11 @@
     <string name="hint">What\'s your goal?</string>
     <string name="string_add_goal">Add Star</string>
     <string name="string_complete_this_star">Complete this Star</string>
+    <string name="action_add">Add a Star</string>
+    <string name="action_filter">Filter by</string>
+    <string name="action_filter_date_desc">Most time remaining</string>
+    <string name="action_filter_date_asc">Least time remaining</string>
+    <string name="action_filter_completed">Completed Stars</string>
+    <string name="action_filter_incomplete">Incomplete Stars</string>
+    <string name="action_filter_off">Filter off</string>
 </resources>
