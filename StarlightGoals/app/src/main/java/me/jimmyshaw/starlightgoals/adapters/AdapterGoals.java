@@ -70,6 +70,17 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         //resetFilterIfNoItems();
     }
 
+    public void completeThisGoal(int position) {
+        // We add an if conditional to make sure don't mark the footer as complete.
+        if (position < realmResults.size()) {
+            realm.beginTransaction();
+            realmResults.get(position).setCompleted(true);
+            realm.commitTransaction();
+            // Refreshes the data set.
+            notifyItemChanged(position);
+        }
+    }
+
     @Override
     public int getItemViewType(int position) {
         // What type of item view within our recycler view are we dealing with? Is it a row item or

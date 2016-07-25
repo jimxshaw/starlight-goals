@@ -76,7 +76,7 @@ public class ActivityMain extends AppCompatActivity {
     private CompleteListener completeListener = new CompleteListener() {
         @Override
         public void onComplete(int position) {
-            Toast.makeText(ActivityMain.this, "Position in Activity " + position, Toast.LENGTH_SHORT).show();
+            adapterGoals.completeThisGoal(position);
         }
     };
 
