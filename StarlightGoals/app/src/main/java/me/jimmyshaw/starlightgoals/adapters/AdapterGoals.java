@@ -1,6 +1,8 @@
 package me.jimmyshaw.starlightgoals.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import me.jimmyshaw.starlightgoals.R;
 import me.jimmyshaw.starlightgoals.models.Goal;
+import me.jimmyshaw.starlightgoals.utilities.Util;
 
 public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements SwipeListener {
 
@@ -123,7 +126,9 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         if (holder instanceof GoalHolder) {
             GoalHolder goalHolder = (GoalHolder) holder;
             Goal goal = realmResults.get(position);
-            goalHolder.textViewGoalText.setText(goal.getGoal());
+
+            goalHolder.setGoalText(goal.getGoal());
+            goalHolder.setBackground(goal.isCompleted());
         }
     }
 
@@ -150,15 +155,41 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         @BindView(R.id.text_view_date_due)
         TextView textViewDateDue;
 
+        private Context context;
+
+        private View itemView;
+
         private DetailListener listener;
 
         public GoalHolder(View itemView, DetailListener detailListener) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
+            context = itemView.getContext();
+
+            this.itemView = itemView;
+
             listener = detailListener;
 
             itemView.setOnClickListener(this);
+        }
+
+        public void setGoalText(String goalText) {
+            textViewGoalText.setText(goalText);
+        }
+
+        public void setBackground(Boolean isCompleted) {
+            // Depending on whether or not the row item is completed, a different drawable will be
+            // returned. The returned drawable has to be set to a view and that view is the row item's
+            // view that's passed in to DropHolder's constructor every time the constructor is called.
+            Drawable drawable;
+            if (isCompleted) {
+                drawable = ContextCompat.getDrawable(context, R.color.background_recycler_view_row_goal_dark);
+            }
+            else {
+                drawable = ContextCompat.getDrawable(context, R.drawable.background_recycler_view_row_goal);
+            }
+            Util.setBackground(itemView, drawable);
         }
 
         @Override

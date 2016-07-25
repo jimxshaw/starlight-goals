@@ -4,5 +4,5 @@
         android:width="1px"
         android:height="1px"/>
     <solid
-        android:color="@color/colorPrimaryDark"/>
+        android:color="@color/recycler_view_row_divider"/>
 </shape>

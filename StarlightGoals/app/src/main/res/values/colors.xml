@@ -5,14 +5,17 @@
     <color name="colorAccent">#8BC34A</color>
 
     <!--
-        Calculating opacity values:
+        Calculating opacity values example:
         29% opacity of 255 is about 74.
         74% opacity of 255 is about 189.
         Int 74 converted to hex is 4A.
         Int 189 converted to hex is BD.
+        4A000000 would be 29% opacity for black.
+        BDFFFFFF would be 74% opacity for white.
     -->
-    <color name="background_recycler_view_row_goal_light">#4AFDD85D</color>
-    <color name="background_recycler_view_row_goal_dark">#BDFDD85D</color>
+    <color name="recycler_view_row_divider">#BDFAA000</color>
+    <color name="background_recycler_view_row_goal_light">#4AFCC107</color>
+    <color name="background_recycler_view_row_goal_dark">#4AFAA000</color>
 
 
 </resources>
