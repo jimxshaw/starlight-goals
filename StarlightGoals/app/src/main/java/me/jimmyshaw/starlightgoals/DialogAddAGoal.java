@@ -11,6 +11,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import java.util.Calendar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -72,12 +74,22 @@ public class DialogAddAGoal extends DialogFragment {
         // Get the value of the goal. Get the time of when it was added.
         String goalText = editTextAddAGoal.getText().toString();
         long dateAdded = System.currentTimeMillis();
+        String dateDue = datePicker.getMonth() + "/" + datePicker.getDayOfMonth() + "/" + datePicker.getYear();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MONTH, datePicker.getMonth());
+        calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
+        calendar.set(Calendar.YEAR, datePicker.getYear());
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
 
         // To use Realm, we have to configure it and then add the configuration to a Realm instance.
         // Since we already configured Realm on start up in the Application configuration class we can
         // simply get a Realm instance without issue.
         Realm realm = Realm.getDefaultInstance();
-        Goal goal = new Goal(dateAdded, 0, goalText, false);
+        Goal goal = new Goal(dateAdded, calendar.getTimeInMillis(), goalText, false);
         // Since copyToRealm is a write instruction, it must be used with a transaction.
         realm.beginTransaction();
         realm.copyToRealm(goal);

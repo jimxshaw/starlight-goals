@@ -17,23 +17,23 @@
 
         <menu>
             <item
-                android:id="@+id/action_sort_descending_date"
+                android:id="@+id/action_filter_date_desc"
                 android:title="@string/action_filter_date_desc"/>
 
             <item
-                android:id="@+id/action_sort_ascending_date"
+                android:id="@+id/action_filter_date_asc"
                 android:title="@string/action_filter_date_asc"/>
 
             <item
-                android:id="@+id/action_complete"
+                android:id="@+id/action_filter_completed"
                 android:title="@string/action_filter_completed"/>
 
             <item
-                android:id="@+id/action_incomplete"
+                android:id="@+id/action_filter_incomplete"
                 android:title="@string/action_filter_incomplete"/>
 
             <item
-                android:id="@+id/action_none"
+                android:id="@+id/action_filter_off"
                 android:title="@string/action_filter_off"/>
         </menu>
     </item>
