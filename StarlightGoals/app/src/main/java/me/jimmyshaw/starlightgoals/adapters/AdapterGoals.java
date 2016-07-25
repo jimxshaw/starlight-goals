@@ -11,17 +11,20 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.Realm;
 import io.realm.RealmResults;
 import me.jimmyshaw.starlightgoals.R;
 import me.jimmyshaw.starlightgoals.models.Goal;
 
-public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements SwipeListener {
 
     public static final String TAG = "Jim";
 
     Context context;
 
     private LayoutInflater inflater;
+
+    private Realm realm;
 
     private RealmResults<Goal> realmResults;
 
@@ -33,11 +36,11 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static final int ROW_ITEM = 0;
     public static final int FOOTER = 1;
 
-    public AdapterGoals(Context context, RealmResults<Goal> realmResults, AddListener addListener) {
+    public AdapterGoals(Context context, Realm realm, RealmResults<Goal> realmResults, AddListener addListener) {
         this.context = context;
         this.addListener = addListener;
-
         inflater = LayoutInflater.from(context);
+        this.realm = realm;
 
         update(realmResults);
 
@@ -48,6 +51,21 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         // collection. This in turn will update each row bound by the view holder.
         this.realmResults = realmResults;
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void onSwipe(int position) {
+        // Since deletion is a write command, we have to begin and commit a Realm transaction.
+        // We add an if conditional to make sure we don't try to delete the footer.
+        if (position < realmResults.size()) {
+            realm.beginTransaction();
+            realmResults.get(position).deleteFromRealm();
+            realm.commitTransaction();
+            // Refreshes the data set.
+            notifyItemRemoved(position);
+        }
+
+        //resetFilterIfNoItems();
     }
 
     @Override

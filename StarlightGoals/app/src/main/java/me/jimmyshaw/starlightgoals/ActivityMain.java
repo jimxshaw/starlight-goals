@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import me.jimmyshaw.starlightgoals.adapters.AdapterGoals;
 import me.jimmyshaw.starlightgoals.adapters.AddListener;
+import me.jimmyshaw.starlightgoals.adapters.SimpleTouchCallback;
 import me.jimmyshaw.starlightgoals.models.Goal;
 import me.jimmyshaw.starlightgoals.utilities.CustomRecyclerViewDivider;
 import me.jimmyshaw.starlightgoals.widgets.CustomRecyclerView;
@@ -91,8 +93,13 @@ public class ActivityMain extends AppCompatActivity {
         recyclerView.hideIfEmpty(toolbar);
         recyclerView.showIfEmpty(viewEmptyGoals);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapterGoals = new AdapterGoals(this, realmResults, addListener);
+        adapterGoals = new AdapterGoals(this, realm, realmResults, addListener);
         recyclerView.setAdapter(adapterGoals);
+
+        // Our adapter implements SwipeListener and so we simply pass that into the constructor.
+        SimpleTouchCallback simpleTouchCallback = new SimpleTouchCallback(adapterGoals);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleTouchCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 
     }
 
