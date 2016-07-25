@@ -29,6 +29,7 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private RealmResults<Goal> realmResults;
 
     private AddListener addListener;
+    private CompleteListener completeListener;
 
     // These arbitrary ints label the view types that are in our recycler view. We only have two
     // types in this case, either a row item or it's the footer. The view type ints will be used
@@ -36,9 +37,10 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static final int ROW_ITEM = 0;
     public static final int FOOTER = 1;
 
-    public AdapterGoals(Context context, Realm realm, RealmResults<Goal> realmResults, AddListener addListener) {
+    public AdapterGoals(Context context, Realm realm, RealmResults<Goal> realmResults, AddListener addListener, CompleteListener completeListener) {
         this.context = context;
         this.addListener = addListener;
+        this.completeListener = completeListener;
         inflater = LayoutInflater.from(context);
         this.realm = realm;
 
@@ -95,7 +97,7 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         else {
             View view = inflater.inflate(R.layout.recycler_view_row_goal, parent, false);
 
-            return new GoalHolder(view);
+            return new GoalHolder(view, completeListener);
         }
 
     }
@@ -129,14 +131,28 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
 
-    public static class GoalHolder extends RecyclerView.ViewHolder {
+    public static class GoalHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.text_view_goal_text)
         TextView textViewGoalText;
 
-        public GoalHolder(View itemView) {
+        @BindView(R.id.text_view_date_due)
+        TextView textViewDateDue;
+
+        private CompleteListener listener;
+
+        public GoalHolder(View itemView, CompleteListener completeListener) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            listener = completeListener;
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            listener.onComplete(getAdapterPosition());
         }
     }
 

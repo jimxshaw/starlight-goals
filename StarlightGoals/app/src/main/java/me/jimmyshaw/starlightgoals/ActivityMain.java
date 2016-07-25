@@ -16,6 +16,7 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import me.jimmyshaw.starlightgoals.adapters.AdapterGoals;
 import me.jimmyshaw.starlightgoals.adapters.AddListener;
+import me.jimmyshaw.starlightgoals.adapters.CompleteListener;
 import me.jimmyshaw.starlightgoals.adapters.SimpleTouchCallback;
 import me.jimmyshaw.starlightgoals.models.Goal;
 import me.jimmyshaw.starlightgoals.utilities.CustomRecyclerViewDivider;
@@ -61,6 +62,13 @@ public class ActivityMain extends AppCompatActivity {
         }
     };
 
+    private CompleteListener completeListener = new CompleteListener() {
+        @Override
+        public void onComplete(int position) {
+            showDialogCompleteThisGoal(position);
+        }
+    };
+
     private RealmChangeListener realmChangeListener = new RealmChangeListener() {
         @Override
         public void onChange(Object element) {
@@ -72,6 +80,11 @@ public class ActivityMain extends AppCompatActivity {
     private void showDialogAddAGoal() {
         DialogAddAGoal dialog = new DialogAddAGoal();
         dialog.show(getSupportFragmentManager(), "Dialog Add a Goal");
+    }
+
+    private void showDialogCompleteThisGoal(int position) {
+        DialogCompleteThisGoal dialog = new DialogCompleteThisGoal();
+        dialog.show(getSupportFragmentManager(), "Dialog Complete This Goal");
     }
 
     @Override
@@ -93,7 +106,7 @@ public class ActivityMain extends AppCompatActivity {
         recyclerView.hideIfEmpty(toolbar);
         recyclerView.showIfEmpty(viewEmptyGoals);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapterGoals = new AdapterGoals(this, realm, realmResults, addListener);
+        adapterGoals = new AdapterGoals(this, realm, realmResults, addListener, completeListener);
         recyclerView.setAdapter(adapterGoals);
 
         // Our adapter implements SwipeListener and so we simply pass that into the constructor.
