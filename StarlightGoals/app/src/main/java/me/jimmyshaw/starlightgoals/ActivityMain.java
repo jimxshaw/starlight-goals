@@ -1,5 +1,6 @@
 package me.jimmyshaw.starlightgoals;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,6 +22,7 @@ import me.jimmyshaw.starlightgoals.adapters.AdapterGoals;
 import me.jimmyshaw.starlightgoals.adapters.AddListener;
 import me.jimmyshaw.starlightgoals.adapters.CompleteListener;
 import me.jimmyshaw.starlightgoals.adapters.DetailListener;
+import me.jimmyshaw.starlightgoals.adapters.Filter;
 import me.jimmyshaw.starlightgoals.adapters.SimpleTouchCallback;
 import me.jimmyshaw.starlightgoals.models.Goal;
 import me.jimmyshaw.starlightgoals.utilities.CustomRecyclerViewDivider;
@@ -30,8 +31,8 @@ import me.jimmyshaw.starlightgoals.widgets.CustomRecyclerView;
 public class ActivityMain extends AppCompatActivity {
 
     public static final String TAG = "Jim";
-
     public static final String ARG_POSITION = "POSITION";
+    public static final String FILTER = "FILTER";
 
     Realm realm;
 
@@ -113,6 +114,42 @@ public class ActivityMain extends AppCompatActivity {
         dialog.show(getSupportFragmentManager(), "Dialog Complete This Goal");
     }
 
+    private void saveToSharedPreferences(int filterOption) {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(FILTER, filterOption);
+        // There are two ways to commit values to shared preferences, commit or apply. The difference
+        // is that commit is synchronous and apply is asynchronous.
+        editor.apply();
+    }
+
+    private int loadFromSharedPreferences() {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        int filterOption = preferences.getInt(FILTER, Filter.OFF);
+        return filterOption;
+    }
+
+    private void loadRealmResults(int filterOption) {
+        switch (filterOption) {
+            case Filter.OFF:
+                realmResults = realm.where(Goal.class).findAllAsync();
+                break;
+            case Filter.MOST_TIME_REMAINING:
+                realmResults = realm.where(Goal.class).findAllSortedAsync("dateDue", Sort.DESCENDING);
+                break;
+            case Filter.LEAST_TIME_REMAINING:
+                realmResults = realm.where(Goal.class).findAllSortedAsync("dateDue");
+                break;
+            case Filter.COMPLETED:
+                realmResults = realm.where(Goal.class).equalTo("completed", true).findAllAsync();
+                break;
+            case Filter.INCOMPLETE:
+                realmResults = realm.where(Goal.class).equalTo("completed", false).findAllAsync();
+                break;
+        }
+        realmResults.addChangeListener(realmChangeListener);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,6 +160,9 @@ public class ActivityMain extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         realm = Realm.getDefaultInstance();
+
+        int filterOption = loadFromSharedPreferences();
+        loadRealmResults(filterOption);
 
         realmResults = realm.where(Goal.class).findAllAsync();
 
@@ -151,45 +191,52 @@ public class ActivityMain extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
         // This method's boolean determines who handles the menu item's action. True means our code,
         // the developer, handles the action. False means Android handles the action.
         // We assume the item action was handled successfully but if not then the default switch
         // case will return false.
         // The toolbar's title changes to the filter option selected as a convenience to the user.
         // If the filter is none then the default title of our app's name is shown.
+        boolean isHandled = true;
+        int filterOption = Filter.OFF;
 
-        int id = item.getItemId();
-
-        switch (id) {
+        switch (menuItem.getItemId()) {
             case R.id.action_add:
                 showDialogAddAGoal();
                 break;
-            case R.id.action_filter_date_asc:
-                realmResults = realm.where(Goal.class).findAllSortedAsync("dateDue");
-                realmResults.addChangeListener(realmChangeListener);
-                break;
             case R.id.action_filter_date_desc:
-                realmResults = realm.where(Goal.class).findAllSortedAsync("dateDue", Sort.DESCENDING);
-                realmResults.addChangeListener(realmChangeListener);
+                filterOption = Filter.MOST_TIME_REMAINING;
+                saveToSharedPreferences(Filter.MOST_TIME_REMAINING);
+                break;
+            case R.id.action_filter_date_asc:
+                filterOption = Filter.LEAST_TIME_REMAINING;
+                saveToSharedPreferences(Filter.LEAST_TIME_REMAINING);
                 break;
             case R.id.action_filter_completed:
-                realmResults = realm.where(Goal.class).equalTo("completed", true).findAllAsync();
-                realmResults.addChangeListener(realmChangeListener);
+                filterOption = Filter.COMPLETED;
+                saveToSharedPreferences(Filter.COMPLETED);
                 break;
             case R.id.action_filter_incomplete:
-                realmResults = realm.where(Goal.class).equalTo("completed", false).findAllAsync();
-                realmResults.addChangeListener(realmChangeListener);
+                filterOption = Filter.INCOMPLETE;
+                saveToSharedPreferences(Filter.INCOMPLETE);
                 break;
             case R.id.action_filter_off:
+                filterOption = Filter.OFF;
+                saveToSharedPreferences(Filter.OFF);
                 break;
             case R.id.action_filter_symbol:
-                break;
+                // Android treats clicking the filter symbol as an actual action before the sub-menus
+                // containing the filter options appear. We have to exit the method with a return statement
+                // immediately to signify that clicking the filter symbol itself does nothing. After
+                // clicking the filter symbol, which does nothing, the sub-menu with its items will show up.
+                return isHandled;
             default:
+                isHandled = false;
                 break;
         }
-
-        return super.onOptionsItemSelected(item);
+        loadRealmResults(filterOption);
+        return isHandled;
     }
 
     @Override
