@@ -8,6 +8,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -16,6 +17,7 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import me.jimmyshaw.starlightgoals.adapters.AdapterGoals;
 import me.jimmyshaw.starlightgoals.adapters.AddListener;
+import me.jimmyshaw.starlightgoals.adapters.CompleteListener;
 import me.jimmyshaw.starlightgoals.adapters.DetailListener;
 import me.jimmyshaw.starlightgoals.adapters.SimpleTouchCallback;
 import me.jimmyshaw.starlightgoals.models.Goal;
@@ -71,6 +73,13 @@ public class ActivityMain extends AppCompatActivity {
         }
     };
 
+    private CompleteListener completeListener = new CompleteListener() {
+        @Override
+        public void onComplete(int position) {
+            Toast.makeText(ActivityMain.this, "Position in Activity " + position, Toast.LENGTH_SHORT).show();
+        }
+    };
+
     private RealmChangeListener realmChangeListener = new RealmChangeListener() {
         @Override
         public void onChange(Object element) {
@@ -94,6 +103,10 @@ public class ActivityMain extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putInt(ARG_POSITION, position);
         dialog.setArguments(bundle);
+        // We pass in the CompleteListener and its implemented onComplete method to DialogDetail so
+        // that when the user clicks the Mark completed button, the row item at its position can
+        // be marked as complete.
+        dialog.setCompleteListener(completeListener);
         dialog.show(getSupportFragmentManager(), "Dialog Complete This Goal");
     }
 

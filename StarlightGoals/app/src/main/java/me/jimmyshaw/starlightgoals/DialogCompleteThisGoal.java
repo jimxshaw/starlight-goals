@@ -13,10 +13,13 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.jimmyshaw.starlightgoals.adapters.CompleteListener;
 
 public class DialogCompleteThisGoal extends DialogFragment {
 
     public static final String ARG_POSITION = "POSITION";
+
+    private CompleteListener completeListener;
 
     @BindView(R.id.image_button_close)
     ImageButton buttonClose;
@@ -33,7 +36,6 @@ public class DialogCompleteThisGoal extends DialogFragment {
                 completeThisGoal();
                 break;
         }
-
         dismiss();
     }
 
@@ -48,7 +50,15 @@ public class DialogCompleteThisGoal extends DialogFragment {
 
         // The bundle arguments that we're getting is the recycler view row item's position integer.
         // We'll use this position int to be able to mark that particular row item as completed.
+        Bundle args = getArguments();
+        if (completeListener != null && args != null) {
+            int position = args.getInt(ARG_POSITION);
+            completeListener.onComplete(position);
+        }
+    }
 
+    public void setCompleteListener(CompleteListener completeListener) {
+        this.completeListener = completeListener;
     }
 
     @Nullable
@@ -64,12 +74,5 @@ public class DialogCompleteThisGoal extends DialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        Bundle arguments = getArguments();
-
-        if (arguments != null) {
-            int position = arguments.getInt(ARG_POSITION);
-            Toast.makeText(getActivity(), "Row position " + position, Toast.LENGTH_SHORT).show();
-        }
     }
 }
