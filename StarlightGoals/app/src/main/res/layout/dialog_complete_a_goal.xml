@@ -2,12 +2,15 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:padding="@dimen/dialog_complete_padding">
 
     <ImageButton
         android:id="@+id/image_button_close"
         android:layout_width="@dimen/image_button_close_width"
         android:layout_height="@dimen/image_button_close_height"
+        android:layout_above="@id/button_complete_a_goal"
         android:layout_alignBottom="@id/text_view_title"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@id/text_view_title"
@@ -20,8 +23,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:layout_marginBottom="@dimen/button_complete_this_goal_margin_vertical"
+        android:layout_marginTop="@dimen/button_complete_this_goal_margin_vertical"
         android:background="@android:color/transparent"
-        android:text="Complete this Star"
-        android:textAllCaps="false"/>
+        android:drawablePadding="@dimen/button_complete_this_goal_padding"
+        android:drawableTop="@drawable/ic_polaris"
+        android:fontFamily="@string/font_family"
+        android:text="@string/string_complete_this_star"
+        android:textAllCaps="false"
+        android:textSize="@dimen/button_add_a_goal_text_size"/>
 
 </RelativeLayout>

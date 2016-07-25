@@ -4,4 +4,5 @@
     <string name="font_family">sans-serif-light</string>
     <string name="hint">What\'s your goal?</string>
     <string name="string_add_goal">Add Star</string>
+    <string name="string_complete_this_star">Complete this Star</string>
 </resources>
