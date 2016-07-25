@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import me.jimmyshaw.starlightgoals.adapters.AdapterGoals;
 import me.jimmyshaw.starlightgoals.adapters.AddListener;
 import me.jimmyshaw.starlightgoals.adapters.CompleteListener;
@@ -151,12 +152,40 @@ public class ActivityMain extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // This method's boolean determines who handles the menu item's action. True means our code,
+        // the developer, handles the action. False means Android handles the action.
+        // We assume the item action was handled successfully but if not then the default switch
+        // case will return false.
+        // The toolbar's title changes to the filter option selected as a convenience to the user.
+        // If the filter is none then the default title of our app's name is shown.
 
         int id = item.getItemId();
 
         switch (id) {
             case R.id.action_add:
-                Toast.makeText(ActivityMain.this, "Action Add clicked!", Toast.LENGTH_SHORT).show();
+                showDialogAddAGoal();
+                break;
+            case R.id.action_filter_date_asc:
+                realmResults = realm.where(Goal.class).findAllSortedAsync("dateDue");
+                realmResults.addChangeListener(realmChangeListener);
+                break;
+            case R.id.action_filter_date_desc:
+                realmResults = realm.where(Goal.class).findAllSortedAsync("dateDue", Sort.DESCENDING);
+                realmResults.addChangeListener(realmChangeListener);
+                break;
+            case R.id.action_filter_completed:
+                realmResults = realm.where(Goal.class).equalTo("completed", true).findAllAsync();
+                realmResults.addChangeListener(realmChangeListener);
+                break;
+            case R.id.action_filter_incomplete:
+                realmResults = realm.where(Goal.class).equalTo("completed", false).findAllAsync();
+                realmResults.addChangeListener(realmChangeListener);
+                break;
+            case R.id.action_filter_off:
+                break;
+            case R.id.action_filter_symbol:
+                break;
+            default:
                 break;
         }
 
