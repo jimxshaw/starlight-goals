@@ -197,7 +197,7 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             // view that's passed in to DropHolder's constructor every time the constructor is called.
             Drawable drawable;
             if (isCompleted) {
-                drawable = ContextCompat.getDrawable(context, R.color.background_recycler_view_row_goal_dark);
+                drawable = ContextCompat.getDrawable(context, R.color.background_recycler_view_row_goal_completed);
             }
             else {
                 drawable = ContextCompat.getDrawable(context, R.drawable.background_recycler_view_row_goal);
