@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import me.jimmyshaw.starlightgoals.AppStarlightGoals;
 import me.jimmyshaw.starlightgoals.R;
 import me.jimmyshaw.starlightgoals.models.Goal;
 import me.jimmyshaw.starlightgoals.utilities.Util;
@@ -35,6 +36,8 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private AddListener addListener;
     private DetailListener detailListener;
 
+    private int filterOption;
+
     // These arbitrary ints label the view types that are in our recycler view. We only have two
     // types in this case, either a row item or it's the footer. The view type ints will be used
     // in onCreateViewHolder.
@@ -47,13 +50,13 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static final int COUNT_FOOTER = 1;
 
     public AdapterGoals(Context context, Realm realm, RealmResults<Goal> realmResults, AddListener addListener, DetailListener detailListener) {
+        inflater = LayoutInflater.from(context);
+        update(realmResults);
+        this.realm = realm;
         this.context = context;
         this.addListener = addListener;
         this.detailListener = detailListener;
-        inflater = LayoutInflater.from(context);
-        this.realm = realm;
-
-        update(realmResults);
+        filterOption = AppStarlightGoals.loadFromSharedPreferences(context);
 
     }
 
@@ -92,14 +95,29 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemViewType(int position) {
-        // What type of item view within our recycler view are we dealing with? Is it a row item or
-        // is it the footer? This method determines that and the int will be passed into the
-        // onCreateViewHolder method.
-        if (realmResults == null || position < realmResults.size()) {
-            return ROW_ITEM;
+        // We add a conditional to capture the null scenario to prevent null pointer exceptions.
+        // Since collections always start at position 0, if the position is less than the collection size
+        // then it will be a goal, otherwise it's the footer.
+        if (!realmResults.isEmpty()) {
+            if (position < realmResults.size()) {
+                return ROW_ITEM;
+            }
+            else {
+                return FOOTER;
+            }
         }
         else {
-            return FOOTER;
+            if (filterOption == Filter.COMPLETED || filterOption == Filter.INCOMPLETE) {
+                if (position == 0) {
+                    return NO_ITEMS;
+                }
+                else {
+                    return FOOTER;
+                }
+            }
+            else {
+                return ROW_ITEM;
+            }
         }
     }
 
@@ -146,13 +164,29 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemCount() {
+        // The results collection does not encompass the footer. We must add 1 to the collection size
+        // for the recycler view to show goals and the footer. Using only the collection's size,
+        // we'll just see the goals.
+        // Only after querying every single filter option and the results still being 0 then we'll
+        // shown the blank main activity screen.
+        // If the user applied a complete or incomplete filter that's stored in shared preferences
+        // and that filter produces no items then we'll show the no items layout with the footer
+        // added behind it.
         if (!realmResults.isEmpty()) {
             // Our realm results have data.
             return realmResults.size() + COUNT_FOOTER;
         }
         else {
             // Our realm results are null.
-            return 0;
+            if (filterOption == Filter.MOST_TIME_REMAINING ||
+                    filterOption == Filter.LEAST_TIME_REMAINING ||
+                    filterOption == Filter.OFF) {
+                // We return 0 since our realm results are empty and we searched every single filter.
+                return 0;
+            }
+            else {
+                return COUNT_NO_ITEMS + COUNT_FOOTER;
+            }
         }
     }
 
