@@ -23,6 +23,7 @@ import me.jimmyshaw.starlightgoals.adapters.AddListener;
 import me.jimmyshaw.starlightgoals.adapters.CompleteListener;
 import me.jimmyshaw.starlightgoals.adapters.DetailListener;
 import me.jimmyshaw.starlightgoals.adapters.Filter;
+import me.jimmyshaw.starlightgoals.adapters.ResetListener;
 import me.jimmyshaw.starlightgoals.adapters.SimpleTouchCallback;
 import me.jimmyshaw.starlightgoals.models.Goal;
 import me.jimmyshaw.starlightgoals.utilities.CustomRecyclerViewDivider;
@@ -80,6 +81,18 @@ public class ActivityMain extends AppCompatActivity {
         @Override
         public void onComplete(int position) {
             adapterGoals.completeThisGoal(position);
+        }
+    };
+
+    private ResetListener resetListener = new ResetListener() {
+        @Override
+        public void onReset() {
+            // When do we reset the app? We reset it when there's no data in our realm database and
+            // AdapterGoals is the class that manages the data. So we have to pass this listener
+            // into the adapter's constructor. Within adapter's onSwipe, we check our database conditions
+            // and call this listener's onReset if the conditions are met.
+            AppStarlightGoals.saveToSharedPreferences(ActivityMain.this, Filter.OFF);
+            loadRealmResults(Filter.OFF);
         }
     };
 
@@ -158,7 +171,7 @@ public class ActivityMain extends AppCompatActivity {
         recyclerView.hideIfEmpty(toolbar);
         recyclerView.showIfEmpty(viewEmptyGoals);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapterGoals = new AdapterGoals(this, realm, realmResults, addListener, detailListener);
+        adapterGoals = new AdapterGoals(this, realm, realmResults, addListener, detailListener, resetListener);
         // To have animations with our row items, we set this field to true. The stable id is what's
         // returned in the adapter's getItemId method and that id will be used with the recycler
         // view's setItemAnimator. We're using the default animation but we could pass in other

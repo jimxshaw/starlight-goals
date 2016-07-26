@@ -35,6 +35,7 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private AddListener addListener;
     private DetailListener detailListener;
+    private ResetListener resetListener;
 
     private int filterOption;
 
@@ -49,7 +50,12 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static final int COUNT_NO_ITEMS = 1;
     public static final int COUNT_FOOTER = 1;
 
-    public AdapterGoals(Context context, Realm realm, RealmResults<Goal> realmResults, AddListener addListener, DetailListener detailListener) {
+    public AdapterGoals(Context context,
+                        Realm realm,
+                        RealmResults<Goal> realmResults,
+                        AddListener addListener,
+                        DetailListener detailListener,
+                        ResetListener resetListener) {
         // Since the update method uses the context, the context must be assigned prior to calling the
         // update method.
         this.context = context;
@@ -58,7 +64,7 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.realm = realm;
         this.addListener = addListener;
         this.detailListener = detailListener;
-
+        this.resetListener = resetListener;
     }
 
     public void update(RealmResults<Goal> realmResults) {
@@ -67,6 +73,12 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.realmResults = realmResults;
         filterOption = AppStarlightGoals.loadFromSharedPreferences(context);
         notifyDataSetChanged();
+    }
+
+    private void resetFilterIfNoItems() {
+        if (realmResults.isEmpty() && (filterOption == Filter.COMPLETED || filterOption == Filter.INCOMPLETE)) {
+            resetListener.onReset();
+        }
     }
 
     @Override
@@ -81,7 +93,7 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             notifyItemRemoved(position);
         }
 
-        //resetFilterIfNoItems();
+        resetFilterIfNoItems();
     }
 
     public void completeThisGoal(int position) {
