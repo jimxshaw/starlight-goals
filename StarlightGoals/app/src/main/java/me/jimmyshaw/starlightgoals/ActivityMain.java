@@ -2,6 +2,7 @@ package me.jimmyshaw.starlightgoals;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -153,10 +154,16 @@ public class ActivityMain extends AppCompatActivity {
         buttonAdd.setOnClickListener(buttonAddAGoalListener);
 
         recyclerView.addItemDecoration(new CustomRecyclerViewDivider(this, LinearLayoutManager.VERTICAL));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.hideIfEmpty(toolbar);
         recyclerView.showIfEmpty(viewEmptyGoals);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapterGoals = new AdapterGoals(this, realm, realmResults, addListener, detailListener);
+        // To have animations with our row items, we set this field to true. The stable id is what's
+        // returned in the adapter's getItemId method and that id will be used with the recycler
+        // view's setItemAnimator. We're using the default animation but we could pass in other
+        // animators if we wanted.
+        adapterGoals.setHasStableIds(true);
         recyclerView.setAdapter(adapterGoals);
 
         // Our adapter implements SwipeListener and so we simply pass that into the constructor.

@@ -50,6 +50,8 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static final int COUNT_FOOTER = 1;
 
     public AdapterGoals(Context context, Realm realm, RealmResults<Goal> realmResults, AddListener addListener, DetailListener detailListener) {
+        // Since the update method uses the context, the context must be assigned prior to calling the
+        // update method.
         this.context = context;
         inflater = LayoutInflater.from(context);
         update(realmResults);
@@ -91,6 +93,17 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             // Refreshes the data set.
             notifyItemChanged(position);
         }
+    }
+
+    @Override
+    public long getItemId(int position) {
+        // This method is used capture a unique id of a row item so we can use it to apply animations to
+        // it. Since more than one row item cannot be add at the same time, we'll use the dateAdded field
+        // of each Goal object as the unique identifier.
+        if (position < realmResults.size()) {
+            return realmResults.get(position).getDateAdded();
+        }
+        return RecyclerView.NO_ID;
     }
 
     @Override
