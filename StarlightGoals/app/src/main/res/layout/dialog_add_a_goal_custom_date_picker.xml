@@ -8,32 +8,25 @@
 
     <TextView
         android:id="@+id/text_view_month"
-        android:layout_width="96dp"
-        android:layout_height="match_parent"
-        android:background="@drawable/background_custom_date_picker_item"
-        android:gravity="center"
-        android:maxLines="1"
-        android:text="JAN"
-        android:textSize="24sp"/>
+        style="@style/CustomDatePickerItemStyle"
+        android:text="JAN"/>
+
+    <android.support.v4.widget.Space
+        android:layout_width="@dimen/custom_date_picker_space_width"
+        android:layout_height="match_parent"/>
 
     <TextView
         android:id="@+id/text_view_day"
-        android:layout_width="96dp"
-        android:layout_height="match_parent"
-        android:background="@drawable/background_custom_date_picker_item"
-        android:gravity="center"
-        android:maxLines="1"
-        android:text="31"
-        android:textSize="24sp"/>
+        style="@style/CustomDatePickerItemStyle"
+        android:text="31"/>
+
+    <android.support.v4.widget.Space
+        android:layout_width="@dimen/custom_date_picker_space_width"
+        android:layout_height="match_parent"/>
 
     <TextView
         android:id="@+id/text_view_year"
-        android:layout_width="96dp"
-        android:layout_height="match_parent"
-        android:background="@drawable/background_custom_date_picker_item"
-        android:gravity="center"
-        android:maxLines="1"
-        android:text="2020"
-        android:textSize="24sp"/>
+        style="@style/CustomDatePickerItemStyle"
+        android:text="2020"/>
 
 </LinearLayout>

@@ -37,5 +37,10 @@
     <!-- No items to display -->
     <dimen name="text_view_no_items_padding_vertical">22dp</dimen>
 
+    <!-- Custom date picker -->
+    <dimen name="custom_date_picker_text_size">24sp</dimen>
+    <dimen name="custom_date_picker_text_view_width">96dp</dimen>
+    <dimen name="custom_date_picker_space_width">16dp</dimen>
+
 
 </resources>

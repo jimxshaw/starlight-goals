@@ -24,4 +24,13 @@
         <item name="android:textColor">@android:color/black</item>
     </style>
 
+    <style name="CustomDatePickerItemStyle">
+        <item name="android:layout_width">@dimen/custom_date_picker_text_view_width</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@drawable/background_custom_date_picker_item</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textSize">@dimen/custom_date_picker_text_size</item>
+    </style>
+
 </resources>
