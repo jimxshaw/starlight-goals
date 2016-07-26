@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,6 +58,13 @@ public class DialogCompleteThisGoal extends DialogFragment {
 
     public void setCompleteListener(CompleteListener completeListener) {
         this.completeListener = completeListener;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // State that our dialog is a normal dialog, nothing fancy, and that it uses a theme we created.
+        setStyle(DialogAddAGoal.STYLE_NORMAL, R.style.DialogTheme);
     }
 
     @Nullable

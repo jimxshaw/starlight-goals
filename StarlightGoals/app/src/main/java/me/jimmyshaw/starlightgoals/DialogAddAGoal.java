@@ -53,6 +53,13 @@ public class DialogAddAGoal extends DialogFragment {
 
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // State that our dialog is a normal dialog, nothing fancy, and that it uses a theme we created.
+        setStyle(DialogAddAGoal.STYLE_NORMAL, R.style.DialogTheme);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -66,8 +73,6 @@ public class DialogAddAGoal extends DialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
     }
 
     private void performAddAction() {
