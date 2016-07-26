@@ -50,13 +50,12 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static final int COUNT_FOOTER = 1;
 
     public AdapterGoals(Context context, Realm realm, RealmResults<Goal> realmResults, AddListener addListener, DetailListener detailListener) {
+        this.context = context;
         inflater = LayoutInflater.from(context);
         update(realmResults);
         this.realm = realm;
-        this.context = context;
         this.addListener = addListener;
         this.detailListener = detailListener;
-        filterOption = AppStarlightGoals.loadFromSharedPreferences(context);
 
     }
 
@@ -64,6 +63,7 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         // Our main activity will call this adapter's update method by passing in a new realm results
         // collection. This in turn will update each row bound by the view holder.
         this.realmResults = realmResults;
+        filterOption = AppStarlightGoals.loadFromSharedPreferences(context);
         notifyDataSetChanged();
     }
 
