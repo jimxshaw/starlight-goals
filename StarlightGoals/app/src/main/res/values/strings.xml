@@ -12,4 +12,5 @@
     <string name="action_filter_completed">Completed Stars</string>
     <string name="action_filter_incomplete">Incomplete Stars</string>
     <string name="action_filter_off">Filter off</string>
+    <string name="no_items_to_display">No items to display</string>
 </resources>

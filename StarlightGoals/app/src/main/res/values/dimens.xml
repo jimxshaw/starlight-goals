@@ -34,6 +34,8 @@
     <dimen name="button_complete_this_goal_padding">20dp</dimen>
     <dimen name="dialog_complete_padding">24dp</dimen>
 
+    <!-- No items to display -->
+    <dimen name="text_view_no_items_padding_vertical">22dp</dimen>
 
 
 </resources>
