@@ -31,6 +31,8 @@
         <item name="android:gravity">center</item>
         <item name="android:maxLines">1</item>
         <item name="android:textSize">@dimen/custom_date_picker_text_size</item>
+        <item name="android:drawableBottom">@drawable/custom_date_picker_down_normal</item>
+        <item name="android:drawableTop">@drawable/custom_date_picker_up_normal</item>
+        <item name="android:drawablePadding">@dimen/custom_date_picker_text_view_drawable_padding</item>
     </style>
-
 </resources>
