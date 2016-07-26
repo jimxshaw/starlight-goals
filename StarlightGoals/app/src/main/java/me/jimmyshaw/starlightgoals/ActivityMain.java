@@ -191,18 +191,23 @@ public class ActivityMain extends AppCompatActivity {
                 break;
             case R.id.action_filter_date_desc:
                 filterOption = Filter.MOST_TIME_REMAINING;
+                toolbar.setTitle(menuItem.getTitle());
                 break;
             case R.id.action_filter_date_asc:
                 filterOption = Filter.LEAST_TIME_REMAINING;
+                toolbar.setTitle(menuItem.getTitle());
                 break;
             case R.id.action_filter_completed:
                 filterOption = Filter.COMPLETED;
+                toolbar.setTitle(menuItem.getTitle());
                 break;
             case R.id.action_filter_incomplete:
                 filterOption = Filter.INCOMPLETE;
+                toolbar.setTitle(menuItem.getTitle());
                 break;
             case R.id.action_filter_off:
                 filterOption = Filter.OFF;
+                toolbar.setTitle(R.string.app_name);
                 break;
             case R.id.action_filter_symbol:
                 // Android treats clicking the filter symbol as an actual action before the sub-menus
