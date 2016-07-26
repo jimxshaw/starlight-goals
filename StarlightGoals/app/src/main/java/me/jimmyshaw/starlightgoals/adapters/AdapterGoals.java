@@ -39,7 +39,12 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     // types in this case, either a row item or it's the footer. The view type ints will be used
     // in onCreateViewHolder.
     public static final int ROW_ITEM = 0;
-    public static final int FOOTER = 1;
+    public static final int NO_ITEMS = 1;
+    public static final int FOOTER = 2;
+
+    // These two int constants will be used with the getItemsCount method.
+    public static final int COUNT_NO_ITEMS = 1;
+    public static final int COUNT_FOOTER = 1;
 
     public AdapterGoals(Context context, Realm realm, RealmResults<Goal> realmResults, AddListener addListener, DetailListener detailListener) {
         this.context = context;
@@ -109,6 +114,11 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             return new FooterHolder(view, addListener);
         }
+        else if (viewType == NO_ITEMS) {
+            View view = inflater.inflate(R.layout.recycler_view_no_items, parent, false);
+
+            return new NoItemsHolders(view);
+        }
         else {
             View view = inflater.inflate(R.layout.recycler_view_row_goal, parent, false);
 
@@ -136,15 +146,13 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        // The actual item count is how many goals are in our realm results + 1. That plus 1 represents
-        // our footer.
-        // Obviously when our realm database has no goals displaying the footer wouldn't make sense.
-        // So in that situation, we display the empty goals layout, which is our main activity layout.
-        if (realmResults == null || realmResults.isEmpty()) {
-            return 0;
+        if (!realmResults.isEmpty()) {
+            // Our realm results have data.
+            return realmResults.size() + COUNT_FOOTER;
         }
         else {
-            return realmResults.size() + FOOTER;
+            // Our realm results are null.
+            return 0;
         }
     }
 
@@ -208,6 +216,14 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         @Override
         public void onClick(View view) {
             listener.onClick(getAdapterPosition());
+        }
+    }
+
+
+    public static class NoItemsHolders extends RecyclerView.ViewHolder {
+
+        public NoItemsHolders(View itemView) {
+            super(itemView);
         }
     }
 
