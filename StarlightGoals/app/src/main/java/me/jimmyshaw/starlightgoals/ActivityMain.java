@@ -1,6 +1,5 @@
 package me.jimmyshaw.starlightgoals;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,7 +31,6 @@ public class ActivityMain extends AppCompatActivity {
 
     public static final String TAG = "Jim";
     public static final String ARG_POSITION = "POSITION";
-    public static final String FILTER = "FILTER";
 
     Realm realm;
 
@@ -114,20 +112,6 @@ public class ActivityMain extends AppCompatActivity {
         dialog.show(getSupportFragmentManager(), "Dialog Complete This Goal");
     }
 
-    private void saveToSharedPreferences(int filterOption) {
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(FILTER, filterOption);
-        // There are two ways to commit values to shared preferences, commit or apply. The difference
-        // is that commit is synchronous and apply is asynchronous.
-        editor.apply();
-    }
-
-    private int loadFromSharedPreferences() {
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        int filterOption = preferences.getInt(FILTER, Filter.OFF);
-        return filterOption;
-    }
 
     private void loadRealmResults(int filterOption) {
         switch (filterOption) {
@@ -161,7 +145,7 @@ public class ActivityMain extends AppCompatActivity {
 
         realm = Realm.getDefaultInstance();
 
-        int filterOption = loadFromSharedPreferences();
+        int filterOption = AppStarlightGoals.loadFromSharedPreferences(this);
         loadRealmResults(filterOption);
 
         realmResults = realm.where(Goal.class).findAllAsync();
@@ -207,23 +191,18 @@ public class ActivityMain extends AppCompatActivity {
                 break;
             case R.id.action_filter_date_desc:
                 filterOption = Filter.MOST_TIME_REMAINING;
-                saveToSharedPreferences(Filter.MOST_TIME_REMAINING);
                 break;
             case R.id.action_filter_date_asc:
                 filterOption = Filter.LEAST_TIME_REMAINING;
-                saveToSharedPreferences(Filter.LEAST_TIME_REMAINING);
                 break;
             case R.id.action_filter_completed:
                 filterOption = Filter.COMPLETED;
-                saveToSharedPreferences(Filter.COMPLETED);
                 break;
             case R.id.action_filter_incomplete:
                 filterOption = Filter.INCOMPLETE;
-                saveToSharedPreferences(Filter.INCOMPLETE);
                 break;
             case R.id.action_filter_off:
                 filterOption = Filter.OFF;
-                saveToSharedPreferences(Filter.OFF);
                 break;
             case R.id.action_filter_symbol:
                 // Android treats clicking the filter symbol as an actual action before the sub-menus
@@ -235,6 +214,8 @@ public class ActivityMain extends AppCompatActivity {
                 isHandled = false;
                 break;
         }
+
+        AppStarlightGoals.saveToSharedPreferences(this, filterOption);
         loadRealmResults(filterOption);
         return isHandled;
     }
