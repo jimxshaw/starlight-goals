@@ -1,6 +1,8 @@
 package me.jimmyshaw.starlightgoals.widgets;
 
 import android.content.Context;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -33,6 +35,12 @@ public class CustomDatePickerView extends LinearLayout implements View.OnTouchLi
     private SimpleDateFormat simpleDateFormat;
 
     public static final String TAG = "Jim";
+
+    // These int variables represent the boundaries of our drawable text views.
+    public static final int LEFT = 0;
+    public static final int TOP = 1;
+    public static final int RIGHT = 2;
+    public static final int BOTTOM = 3;
 
     // We have 3 constructors. The last two constructors are needed if we want to create our
     // custom date picker view from xml as opposed to in code.
@@ -85,6 +93,66 @@ public class CustomDatePickerView extends LinearLayout implements View.OnTouchLi
         return calendar.getTimeInMillis();
     }
 
+    private void processTouchEvents(TextView textView, MotionEvent motionEvent) {
+        // To contain a touch event to a particular region of the text view drawable, we must take
+        // the boundaries and calculate with them accordingly.
+        Drawable[] drawables = textView.getCompoundDrawables();
+
+        if (hasTopDrawable(drawables) && hasBottomDrawable(drawables)) {
+            // Get top and bottom boundaries, which are rectangles, of our text view drawable.
+            Rect boundsTop = drawables[TOP].getBounds();
+            Rect boundsBottom = drawables[BOTTOM].getBounds();
+
+            // Get coordinates of the motionEvent.
+            float x = motionEvent.getX();
+            float y = motionEvent.getY();
+
+            // Find out which drawable, top or bottom, was clicked.
+            // If top drawable was clicked then perform all the action related to incrementing the
+            // date value, be it month, day or year. This would apply if the bottom drawable was
+            // clicked but the date value would decrement.
+            // The usage of if-else if-else is key because we only want one drawable to be clicked.
+            // If we wanted both top and bottom and even the middle of the drawable to be clicked
+            // simultaneously then we'd have separate if conditions.
+            if (wasTopDrawableClicked(textView, 0, x, y)) {
+
+            }
+            else if (wasBottomDrawableClicked(textView, 0, x, y)) {
+
+            }
+            else {
+                // This condition occurs when the middle of the text view was clicked.
+
+            }
+        }
+    }
+
+    private boolean hasTopDrawable(Drawable[] drawables) {
+        return drawables[TOP] != null;
+    }
+
+    private boolean wasTopDrawableClicked(TextView textView, int drawableHeight, float x, float y) {
+        int xmin = textView.getPaddingLeft();
+        int xmax = textView.getWidth() - textView.getPaddingRight();
+        int ymin = textView.getPaddingTop();
+        int ymax = textView.getPaddingTop() + drawableHeight;
+
+        return x > xmin && x < xmax && y > ymin && y < ymax;
+    }
+
+    private boolean hasBottomDrawable(Drawable[] drawables) {
+        return drawables[BOTTOM] != null;
+    }
+
+    private boolean wasBottomDrawableClicked(TextView textView, int drawableHeight, float x, float y) {
+        int xmin = textView.getPaddingLeft();
+        int xmax = textView.getWidth() - textView.getPaddingRight();
+        int ymax = textView.getHeight() - textView.getPaddingBottom();
+        int ymin = ymax - drawableHeight;
+
+        return x > xmin && x < xmax && y > ymin && y < ymax;
+    }
+
     @Override
     protected void onFinishInflate() {
         // This special method manages our views after the layout file as been inflated. The work
@@ -110,17 +178,18 @@ public class CustomDatePickerView extends LinearLayout implements View.OnTouchLi
     public boolean onTouch(View view, MotionEvent motionEvent) {
         // The passed in view is the view that was touched but which one? That's determined by a
         // switch statement that takes in the view's id.
-        switch (motionEvent.getAction()) {
-            case MotionEvent.ACTION_DOWN:
+
+        switch (view.getId()) {
+            case R.id.text_view_month:
+                processTouchEvents(textViewMonth, motionEvent);
                 break;
-            case MotionEvent.ACTION_MOVE:
+            case R.id.text_view_day:
+                processTouchEvents(textViewMonth, motionEvent);
                 break;
-            case MotionEvent.ACTION_UP:
-                break;
-            case MotionEvent.ACTION_CANCEL:
+            case R.id.text_view_year:
+                processTouchEvents(textViewMonth, motionEvent);
                 break;
         }
-
         // The boolean specifies whether or not the touch event has been consumed. True for yes or
         // false for no.
         return true;
