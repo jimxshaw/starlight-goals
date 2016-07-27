@@ -9,6 +9,9 @@
         <shape>
             <solid android:color="@android:color/transparent"/>
             <size android:width="@dimen/custom_date_picker_text_view_width"/>
+            <corners
+                android:bottomLeftRadius="5dp"
+                android:bottomRightRadius="5dp"/>
         </shape>
     </item>
     <item android:height="30dp">

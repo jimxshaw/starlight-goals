@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import butterknife.BindView;
@@ -27,6 +28,8 @@ public class CustomDatePickerView extends LinearLayout {
     TextView textViewYear;
 
     private Calendar calendar;
+
+    private SimpleDateFormat simpleDateFormat;
 
     public static final String TAG = "Jim";
 
@@ -51,7 +54,12 @@ public class CustomDatePickerView extends LinearLayout {
         // The purpose of this initialize method is to use the LayoutInflater to inflate the specific
         // custom date picker layout and bind it to this specific custom date picker class.
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_add_a_goal_custom_date_picker, this); // The this keyword specifies this class is what's linked with this layout.
+        // An alternative to using the default Java calendar would be the JodaTime for Android library.
         calendar = Calendar.getInstance();
+        // We instantiate a SimpleDateFormat class in order to set how we'd like our months to be displayed.
+        // The actual updating of the month format will take place in our updateCalendar method right
+        // before we set the text of the month text view.
+        simpleDateFormat = new SimpleDateFormat("MMM");
     }
 
     private void updateCalendar(int month, int day, int year, int hour, int minute, int second) {
@@ -67,7 +75,7 @@ public class CustomDatePickerView extends LinearLayout {
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, second);
 
-        textViewMonth.setText(String.valueOf(month));
+        textViewMonth.setText(simpleDateFormat.format(calendar.getTime()));
         textViewDay.setText(String.valueOf(day));
         textViewYear.setText(String.valueOf(year));
     }
