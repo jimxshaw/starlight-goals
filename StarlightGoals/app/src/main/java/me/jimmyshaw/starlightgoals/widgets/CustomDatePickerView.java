@@ -114,11 +114,17 @@ public class CustomDatePickerView extends LinearLayout implements View.OnTouchLi
             // The usage of if-else if-else is key because we only want one drawable to be clicked.
             // If we wanted both top and bottom and even the middle of the drawable to be clicked
             // simultaneously then we'd have separate if conditions.
-            if (wasTopDrawableClicked(textView, 0, x, y)) {
-
+            if (wasTopDrawableClicked(textView, boundsTop.height(), x, y)) {
+                if (isActionDown(motionEvent)) {
+                    // Increment the value here.
+                    increment(textView.getId());
+                }
             }
-            else if (wasBottomDrawableClicked(textView, 0, x, y)) {
-
+            else if (wasBottomDrawableClicked(textView, boundsBottom.height(), x, y)) {
+                if (isActionDown(motionEvent)) {
+                    // Decrement the value here.
+                    decrement(textView.getId());
+                }
             }
             else {
                 // This condition occurs when the middle of the text view was clicked.
@@ -132,10 +138,14 @@ public class CustomDatePickerView extends LinearLayout implements View.OnTouchLi
     }
 
     private boolean wasTopDrawableClicked(TextView textView, int drawableHeight, float x, float y) {
-        int xmin = textView.getPaddingLeft();
+        // Width of the text view - padding right.
         int xmax = textView.getWidth() - textView.getPaddingRight();
-        int ymin = textView.getPaddingTop();
+        // Padding left.
+        int xmin = textView.getPaddingLeft();
+        // Padding top + drawable height.
         int ymax = textView.getPaddingTop() + drawableHeight;
+        // Padding top of the text view.
+        int ymin = textView.getPaddingTop();
 
         return x > xmin && x < xmax && y > ymin && y < ymax;
     }
@@ -145,12 +155,72 @@ public class CustomDatePickerView extends LinearLayout implements View.OnTouchLi
     }
 
     private boolean wasBottomDrawableClicked(TextView textView, int drawableHeight, float x, float y) {
-        int xmin = textView.getPaddingLeft();
+        // Width of the text view - padding right.
         int xmax = textView.getWidth() - textView.getPaddingRight();
+        // Padding left.
+        int xmin = textView.getPaddingLeft();
+        // Total height of the text view - padding bottom.
         int ymax = textView.getHeight() - textView.getPaddingBottom();
+        // Total height of the text view - the height of the drawable region.
         int ymin = ymax - drawableHeight;
 
         return x > xmin && x < xmax && y > ymin && y < ymax;
+    }
+
+    private boolean isActionDown(MotionEvent motionEvent) {
+        // ACTION_DOWN is when we first touch the screen.
+        // ACTION_MOVE takes place after ACTION_DOWN when we move our finger or we hold our finger.
+        // ACTION_UP takes place after we released our touch action.
+        // ACTION_CANCEL occurs when the current touch action is aborted (usually by Android itself).
+        return motionEvent.getAction() == MotionEvent.ACTION_DOWN;
+    }
+
+    private void increment(int id) {
+        // The id of the text view to be incremented is passed in.
+        switch (id) {
+            case R.id.text_view_month:
+                // Get the calendar month and increment it by 1.
+                calendar.add(Calendar.MONTH, 1);
+                break;
+            case R.id.text_view_day:
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                break;
+            case R.id.text_view_year:
+                calendar.add(Calendar.YEAR, 1);
+                break;
+        }
+        // Simply incrementing the calendar value in the background isn't enough. We must show the
+        // text view change visually. We must update it.
+        refreshCalendarUI(calendar);
+    }
+
+    private void decrement(int id) {
+        // The id of the text view to be decremented is passed in.
+        switch (id) {
+            case R.id.text_view_month:
+                // Get the calendar month and decrement it by 1.
+                calendar.add(Calendar.MONTH, -1);
+                break;
+            case R.id.text_view_day:
+                calendar.add(Calendar.DAY_OF_MONTH, -1);
+                break;
+            case R.id.text_view_year:
+                calendar.add(Calendar.YEAR, -1);
+                break;
+        }
+        // Simply decrementing the calendar value in the background isn't enough. We must show the
+        // text view change visually. We must update it.
+        refreshCalendarUI(calendar);
+    }
+
+    private void refreshCalendarUI(Calendar calendar) {
+        textViewMonth.setText(simpleDateFormat.format(calendar.getTime()));
+
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int year = calendar.get(Calendar.YEAR);
+
+        textViewDay.setText(String.valueOf(day));
+        textViewYear.setText(String.valueOf(year));
     }
 
     @Override
@@ -184,10 +254,10 @@ public class CustomDatePickerView extends LinearLayout implements View.OnTouchLi
                 processTouchEvents(textViewMonth, motionEvent);
                 break;
             case R.id.text_view_day:
-                processTouchEvents(textViewMonth, motionEvent);
+                processTouchEvents(textViewDay, motionEvent);
                 break;
             case R.id.text_view_year:
-                processTouchEvents(textViewMonth, motionEvent);
+                processTouchEvents(textViewYear, motionEvent);
                 break;
         }
         // The boolean specifies whether or not the touch event has been consumed. True for yes or
