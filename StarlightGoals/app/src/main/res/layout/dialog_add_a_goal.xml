@@ -38,7 +38,7 @@
             android:padding="@dimen/edit_text_add_a_goal_padding"
             android:singleLine="true"/>
 
-        <DatePicker
+        <me.jimmyshaw.starlightgoals.widgets.CustomDatePickerView
             android:id="@+id/date_picker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

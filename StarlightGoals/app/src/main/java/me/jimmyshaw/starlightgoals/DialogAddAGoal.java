@@ -19,6 +19,7 @@ import butterknife.OnClick;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import me.jimmyshaw.starlightgoals.models.Goal;
+import me.jimmyshaw.starlightgoals.widgets.CustomDatePickerView;
 
 public class DialogAddAGoal extends DialogFragment {
 
@@ -46,7 +47,7 @@ public class DialogAddAGoal extends DialogFragment {
     EditText editTextAddAGoal;
 
     @BindView(R.id.date_picker)
-    DatePicker datePicker;
+    CustomDatePickerView datePicker;
 
 
     public DialogAddAGoal() {
@@ -79,22 +80,14 @@ public class DialogAddAGoal extends DialogFragment {
         // Get the value of the goal. Get the time of when it was added.
         String goalText = editTextAddAGoal.getText().toString();
         long dateAdded = System.currentTimeMillis();
-        String dateDue = datePicker.getMonth() + "/" + datePicker.getDayOfMonth() + "/" + datePicker.getYear();
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.MONTH, datePicker.getMonth());
-        calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
-        calendar.set(Calendar.YEAR, datePicker.getYear());
-        calendar.set(Calendar.HOUR, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
 
 
         // To use Realm, we have to configure it and then add the configuration to a Realm instance.
         // Since we already configured Realm on start up in the Application configuration class we can
         // simply get a Realm instance without issue.
         Realm realm = Realm.getDefaultInstance();
-        Goal goal = new Goal(dateAdded, calendar.getTimeInMillis(), goalText, false);
+        Goal goal = new Goal(dateAdded, datePicker.getTime(), goalText, false);
         // Since copyToRealm is a write instruction, it must be used with a transaction.
         realm.beginTransaction();
         realm.copyToRealm(goal);
