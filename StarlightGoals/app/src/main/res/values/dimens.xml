@@ -42,6 +42,7 @@
     <dimen name="custom_date_picker_text_view_width">96dp</dimen>
     <dimen name="custom_date_picker_space_width">16dp</dimen>
     <dimen name="custom_date_picker_text_view_drawable_padding">16dp</dimen>
+    <dimen name="custom_date_picker_margin_vertical">60dp</dimen>
 
 
 </resources>

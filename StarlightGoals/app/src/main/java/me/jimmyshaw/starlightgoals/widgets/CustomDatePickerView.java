@@ -3,6 +3,7 @@ package me.jimmyshaw.starlightgoals.widgets;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,7 +17,7 @@ import me.jimmyshaw.starlightgoals.R;
 
 // This class extends LinearLayout because our custom date picker layout xml file has the root
 // element of LinearLayout.
-public class CustomDatePickerView extends LinearLayout {
+public class CustomDatePickerView extends LinearLayout implements View.OnTouchListener {
 
     @BindView(R.id.text_view_month)
     TextView textViewMonth;
@@ -91,6 +92,10 @@ public class CustomDatePickerView extends LinearLayout {
         super.onFinishInflate();
         ButterKnife.bind(this);
 
+        textViewMonth.setOnTouchListener(this);
+        textViewDay.setOnTouchListener(this);
+        textViewYear.setOnTouchListener(this);
+
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         int year = calendar.get(Calendar.YEAR);
@@ -99,5 +104,25 @@ public class CustomDatePickerView extends LinearLayout {
         // date parameters passed in after getting them from the calendar member variable.
         // Since our date picker doesn't take into account the hour, minute or second, we'll pass 0s.
         updateCalendar(month, day, year, 0, 0, 0);
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        // The passed in view is the view that was touched but which one? That's determined by a
+        // switch statement that takes in the view's id.
+        switch (motionEvent.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                break;
+            case MotionEvent.ACTION_MOVE:
+                break;
+            case MotionEvent.ACTION_UP:
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                break;
+        }
+
+        // The boolean specifies whether or not the touch event has been consumed. True for yes or
+        // false for no.
+        return true;
     }
 }
