@@ -11,8 +11,9 @@
             <size android:width="@dimen/custom_date_picker_text_view_width"/>
         </shape>
     </item>
-    <item
-        android:height="30dp"
-        android:drawable="@drawable/ic_arrow_up_pressed"
-        android:gravity="center"/>
+    <item android:height="30dp">
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/ic_arrow_up_pressed"/>
+    </item>
 </layer-list>
