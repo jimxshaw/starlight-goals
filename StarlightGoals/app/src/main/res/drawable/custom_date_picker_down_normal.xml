@@ -14,7 +14,7 @@
                 android:bottomRightRadius="5dp"/>
         </shape>
     </item>
-    <item android:height="30dp">
+    <item android:height="40dp">
         <bitmap
             android:gravity="center"
             android:src="@drawable/ic_arrow_down_normal"/>
