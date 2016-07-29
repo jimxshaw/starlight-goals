@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
 
         <item name="android:fontFamily">@string/font_family</item>
+        <item name="android:textColorHint">@android:color/white</item>
 
     </style>
 
@@ -34,6 +35,7 @@
         <item name="android:textSize">@dimen/custom_date_picker_text_size</item>
         <item name="android:drawableBottom">@drawable/custom_date_picker_down_normal</item>
         <item name="android:drawableTop">@drawable/custom_date_picker_up_normal</item>
-        <item name="android:drawablePadding">@dimen/custom_date_picker_text_view_drawable_padding</item>
+        <item name="android:drawablePadding">@dimen/custom_date_picker_text_view_drawable_padding
+        </item>
     </style>
 </resources>

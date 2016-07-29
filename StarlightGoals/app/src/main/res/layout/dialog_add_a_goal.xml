@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:theme="@style/AppTheme">
 
     <RelativeLayout
 
@@ -43,9 +44,9 @@
             android:id="@+id/date_picker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/custom_date_picker_margin_vertical"
+            android:layout_below="@id/edit_text_add_a_goal"
             android:layout_marginBottom="@dimen/custom_date_picker_margin_vertical"
-            android:layout_below="@id/edit_text_add_a_goal"/>
+            android:layout_marginTop="@dimen/custom_date_picker_margin_vertical"/>
 
         <Button
             android:id="@+id/button_add_goal"
