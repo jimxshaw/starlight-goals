@@ -3,9 +3,12 @@ package me.jimmyshaw.starlightgoals.widgets;
 import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,6 +27,12 @@ import me.jimmyshaw.starlightgoals.R;
 public class CustomDatePickerView extends LinearLayout implements View.OnTouchListener {
 
     public static final String TAG = "Jim";
+
+    // These tags are used with the saved instance state of our custom date picker widget.
+    public static final String TAG_SUPER = "super";
+    public static final String TAG_MONTH = "month";
+    public static final String TAG_DAY = "day";
+    public static final String TAG_YEAR = "year";
 
     @BindView(R.id.text_view_month)
     TextView textViewMonth;
@@ -318,6 +327,48 @@ public class CustomDatePickerView extends LinearLayout implements View.OnTouchLi
     }
 
     @Override
+    protected Parcelable onSaveInstanceState() {
+        // We must save our instance state to prevent the user input values from being destroyed
+        // then recreated on rotation. What's being saved? The linear layout data that contains our custom
+        // date picker widget.
+        // The difference between Parcels and Bundles is that items in a Parcel must be read back in
+        // the same sequence they were written. Items in a Bundle are identified by a key string and
+        // can be retrieved in any order.
+        // Parcelable is an interface that our objects can implement in order to save our state to, or
+        // restore from, a Parcel. A Parcel can contain one or more Bundles. A Bundle implements the
+        // Parcelable interface.
+        super.onSaveInstanceState();
+        Log.d(TAG, "onSaveInstanceState: ");
+        Bundle bundle = new Bundle();
+        // We put in the super as it contains all the data that the view is holding. This super MUST
+        // be retrieved in onRestoreInstanceState or our app will crash.
+        bundle.putParcelable(TAG_SUPER, super.onSaveInstanceState());
+        bundle.putInt(TAG_MONTH, calendar.get(Calendar.MONTH));
+        bundle.putInt(TAG_DAY, calendar.get(Calendar.DAY_OF_MONTH));
+        bundle.putInt(TAG_YEAR, calendar.get(Calendar.YEAR));
+
+        return bundle;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        Log.d(TAG, "onRestoreInstanceState: ");
+        if (state instanceof Parcelable) {
+            Bundle bundle = (Bundle) state;
+            state = bundle.getParcelable(TAG_SUPER);
+            int month = bundle.getInt(TAG_MONTH);
+            int day = bundle.getInt(TAG_DAY);
+            int year = bundle.getInt(TAG_YEAR);
+
+            // After retrieving the values from our saved bundle, we update our calendar back to
+            // the prior saved values.
+            updateCalendar(month, day, year, 0, 0, 0);
+        }
+        // The super statement will restore the date previously in our linear layout.
+        super.onRestoreInstanceState(state);
+    }
+
+    @Override
     protected void onFinishInflate() {
         // This special method manages our views after the layout file as been inflated. The work
         // done in this method is considered the final phase of the overall inflation process.
@@ -358,4 +409,5 @@ public class CustomDatePickerView extends LinearLayout implements View.OnTouchLi
         // false for no.
         return true;
     }
+    
 }
