@@ -305,8 +305,18 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public static class NoItemsHolders extends RecyclerView.ViewHolder {
 
+        @BindView(R.id.text_view_no_items)
+        TextView textViewNoItems;
+
+        Context context;
+
         public NoItemsHolders(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
+
+            context = itemView.getContext();
+
+            AppStarlightGoals.setWidgetTypeface(context, textViewNoItems);
         }
     }
 

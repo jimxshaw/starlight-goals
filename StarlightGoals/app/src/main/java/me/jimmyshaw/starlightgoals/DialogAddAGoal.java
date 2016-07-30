@@ -75,6 +75,8 @@ public class DialogAddAGoal extends DialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        AppStarlightGoals.setWidgetTypeface(view.getContext(), editTextAddAGoal);
     }
 
     private void performAddAction() {

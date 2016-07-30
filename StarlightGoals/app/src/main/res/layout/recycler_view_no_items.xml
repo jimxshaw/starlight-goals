@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/text_view_no_items"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/background_recycler_view_row_goal_completed"
     android:gravity="center"
     android:paddingBottom="@dimen/text_view_no_items_padding_vertical"
     android:paddingTop="@dimen/text_view_no_items_padding_vertical"
-    android:text="@string/no_items_to_display"/>
+    android:text="@string/no_items_to_display"
+    android:textSize="@dimen/recycler_view_row_item_text_size"
+    android:textStyle="bold"/>
