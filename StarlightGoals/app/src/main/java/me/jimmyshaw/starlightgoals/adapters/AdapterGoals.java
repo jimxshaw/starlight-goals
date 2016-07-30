@@ -235,12 +235,12 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ButterKnife.bind(this, itemView);
 
             context = itemView.getContext();
-
             this.itemView = itemView;
-
             listener = detailListener;
-
             itemView.setOnClickListener(this);
+
+            // Set a different font for our row item text widgets.
+            AppStarlightGoals.setWidgetTypeface(context, textViewGoalText, textViewDateDue);
         }
 
         public void setGoalText(String goalText) {

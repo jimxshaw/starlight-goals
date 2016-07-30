@@ -44,5 +44,8 @@
     <dimen name="custom_date_picker_text_view_drawable_padding">16dp</dimen>
     <dimen name="custom_date_picker_margin_vertical">60dp</dimen>
 
+    <!-- Recycler view row item -->
+    <dimen name="recycler_view_row_item_text_size">16sp</dimen>
+
 
 </resources>

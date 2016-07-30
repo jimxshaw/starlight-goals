@@ -3,7 +3,9 @@ package me.jimmyshaw.starlightgoals;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.preference.PreferenceManager;
+import android.widget.TextView;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -16,6 +18,9 @@ import me.jimmyshaw.starlightgoals.adapters.Filter;
 public class AppStarlightGoals extends Application {
 
     public static final String FILTER = "FILTER";
+
+    // This constant is used to designate the path of the font we want.
+    public static final String FONT_PATH = "fonts/raleway_thin.ttf";
 
     @Override
     public void onCreate() {
@@ -43,4 +48,23 @@ public class AppStarlightGoals extends Application {
         int filterOption = preferences.getInt(FILTER, Filter.OFF);
         return filterOption;
     }
+
+    public static void setWidgetTypeface(Context context, TextView textView) {
+        // To use any custom fonts like Raleway, we have to use a special type called Typeface.
+        // The createFromAsset method is used because we already have the .ttf font file located
+        // in our assets/fonts folder. An asset manager, the first parameter, handles all that
+        // goes inside the asset folder. The path to the .ttf file is our second parameter. After
+        // capturing the typeface, set it to whichever text view we like.
+        Typeface typeface = Typeface.createFromAsset(context.getAssets(), FONT_PATH);
+        textView.setTypeface(typeface);
+    }
+
+    public static void setWidgetTypeface(Context context, TextView... textViews) {
+        Typeface typeface = Typeface.createFromAsset(context.getAssets(), FONT_PATH);
+
+        for (TextView textView : textViews) {
+            textView.setTypeface(typeface);
+        }
+    }
+
 }
