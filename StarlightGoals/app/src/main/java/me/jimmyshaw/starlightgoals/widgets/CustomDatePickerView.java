@@ -3,12 +3,15 @@ package me.jimmyshaw.starlightgoals.widgets;
 import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -20,6 +23,8 @@ import me.jimmyshaw.starlightgoals.R;
 // This class extends LinearLayout because our custom date picker layout xml file has the root
 // element of LinearLayout.
 public class CustomDatePickerView extends LinearLayout implements View.OnTouchListener {
+
+    public static final String TAG = "Jim";
 
     @BindView(R.id.text_view_month)
     TextView textViewMonth;
@@ -34,13 +39,35 @@ public class CustomDatePickerView extends LinearLayout implements View.OnTouchLi
 
     private SimpleDateFormat simpleDateFormat;
 
-    public static final String TAG = "Jim";
-
     // These int variables represent the boundaries of our drawable text views.
     public static final int LEFT = 0;
     public static final int TOP = 1;
     public static final int RIGHT = 2;
     public static final int BOTTOM = 3;
+
+    private boolean increment;
+    private boolean decrement;
+
+    // The purpose of our int MESSAGE_WHAT is an arbitrary number that's used to differentiate one
+    // message from other messages, in case there are multiple messages.
+    // The delay is the time in milliseconds that the handler will wait before processing another message.
+    private int MESSAGE_WHAT = 101;
+    public static final int DELAY = 200;
+
+    // The purpose of using a handler is to take in to consideration long pressing on a date field's
+    // up or down arrow. A message that signifies an arrow is pressed is added to the message queue.
+    // This handler handles that message by either incrementing or decrementing the field value after a
+    // specified delay. If the arrow press continues then a new message is sent to the queue and
+    // the cycle repeats until the user no longer clicks.
+    private Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message message) {
+            Toast.makeText(getContext(), "Message received!", Toast.LENGTH_SHORT).show();
+
+            // We're handling the message ourselves so we return true in this method.
+            return true;
+        }
+    });
 
     // We have 3 constructors. The last two constructors are needed if we want to create our
     // custom date picker view from xml as opposed to in code.
@@ -109,25 +136,41 @@ public class CustomDatePickerView extends LinearLayout implements View.OnTouchLi
 
             // Find out which drawable, top or bottom, was clicked.
             // If top drawable was clicked then perform all the action related to incrementing the
-            // date value, be it month, day or year. This would apply if the bottom drawable was
-            // clicked but the date value would decrement.
+            // date value, be it month, day or year. This would apply as well if the bottom drawable was
+            // clicked. In that case, the date value would decrement.
             // The usage of if-else if-else is key because we only want one drawable to be clicked.
             // If we wanted both top and bottom and even the middle of the drawable to be clicked
             // simultaneously then we'd have separate if conditions.
             if (wasTopDrawableClicked(textView, boundsTop.height(), x, y)) {
                 if (isActionDown(motionEvent)) {
                     // Increment the value here.
+                    increment = true;
                     increment(textView.getId());
+                    // We're sending the handler the same message, either increment or decrement.
+                    // There's no reason for them to pile up unnecessarily so we remove the pile before
+                    // sending a new message to be processed.
+                    handler.removeMessages(MESSAGE_WHAT);
+                    handler.sendEmptyMessageDelayed(MESSAGE_WHAT, DELAY);
+                }
+                if (isActionUpOrCancel(motionEvent)) {
+                    increment = false;
                 }
             }
             else if (wasBottomDrawableClicked(textView, boundsBottom.height(), x, y)) {
                 if (isActionDown(motionEvent)) {
                     // Decrement the value here.
+                    decrement = true;
                     decrement(textView.getId());
+                }
+                if (isActionUpOrCancel(motionEvent)) {
+                    decrement = false;
                 }
             }
             else {
-                // This condition occurs when the middle of the text view was clicked.
+                // This condition occurs when the middle of the text view was clicked. Currently,
+                // nothing will happen but if we wanted to perform a functionality, we'd put that here.
+                increment = false;
+                decrement = false;
 
             }
         }
@@ -173,6 +216,11 @@ public class CustomDatePickerView extends LinearLayout implements View.OnTouchLi
         // ACTION_UP takes place after we released our touch action.
         // ACTION_CANCEL occurs when the current touch action is aborted (usually by Android itself).
         return motionEvent.getAction() == MotionEvent.ACTION_DOWN;
+    }
+
+    private boolean isActionUpOrCancel(MotionEvent motionEvent) {
+        return motionEvent.getAction() == MotionEvent.ACTION_UP
+                || motionEvent.getAction() == MotionEvent.ACTION_CANCEL;
     }
 
     private void increment(int id) {
