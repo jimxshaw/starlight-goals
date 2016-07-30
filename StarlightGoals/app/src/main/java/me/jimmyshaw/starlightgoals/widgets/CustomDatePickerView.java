@@ -52,7 +52,9 @@ public class CustomDatePickerView extends LinearLayout implements View.OnTouchLi
     // message from other messages, in case there are multiple messages.
     // The delay is the time in milliseconds that the handler will wait before processing another message.
     private int MESSAGE_WHAT = 101;
-    public static final int DELAY = 200;
+    private static final int DELAY = 200;
+
+    private int activeTextViewId;
 
     // The purpose of using a handler is to take in to consideration long pressing on a date field's
     // up or down arrow. A message that signifies an arrow is pressed is added to the message queue.
@@ -62,7 +64,23 @@ public class CustomDatePickerView extends LinearLayout implements View.OnTouchLi
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {
-            Toast.makeText(getContext(), "Message received!", Toast.LENGTH_SHORT).show();
+            // We check if we're incrementing or decrementing in order to call the appropriate method.
+            if (increment) {
+                increment(activeTextViewId);
+            }
+            if (decrement) {
+                decrement(activeTextViewId);
+            }
+
+            // As long as we're wanting to incrementing or decrementing (holding the text view up
+            // or down button), we will continuously use the handler to send messages.
+            if (increment || decrement) {
+                // The reason an empty message is used because if we want to use a regular message
+                // then we'll have to construct a new message object every time. Since we're firing
+                // messages with the briefest of delays of milliseconds, it'd be inefficient to
+                // instantiate new messages objects with such frequency.
+                handler.sendEmptyMessageDelayed(MESSAGE_WHAT, DELAY);
+            }
 
             // We're handling the message ourselves so we return true in this method.
             return true;
@@ -134,6 +152,8 @@ public class CustomDatePickerView extends LinearLayout implements View.OnTouchLi
             float x = motionEvent.getX();
             float y = motionEvent.getY();
 
+            activeTextViewId = textView.getId();
+
             // Find out which drawable, top or bottom, was clicked.
             // If top drawable was clicked then perform all the action related to incrementing the
             // date value, be it month, day or year. This would apply as well if the bottom drawable was
@@ -161,6 +181,8 @@ public class CustomDatePickerView extends LinearLayout implements View.OnTouchLi
                     // Decrement the value here.
                     decrement = true;
                     decrement(textView.getId());
+                    handler.removeMessages(MESSAGE_WHAT);
+                    handler.sendEmptyMessageDelayed(MESSAGE_WHAT, DELAY);
                 }
                 if (isActionUpOrCancel(motionEvent)) {
                     decrement = false;
