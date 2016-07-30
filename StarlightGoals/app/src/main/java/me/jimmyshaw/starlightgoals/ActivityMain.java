@@ -23,6 +23,7 @@ import me.jimmyshaw.starlightgoals.adapters.AddListener;
 import me.jimmyshaw.starlightgoals.adapters.CompleteListener;
 import me.jimmyshaw.starlightgoals.adapters.DetailListener;
 import me.jimmyshaw.starlightgoals.adapters.Filter;
+import me.jimmyshaw.starlightgoals.adapters.IncompleteListener;
 import me.jimmyshaw.starlightgoals.adapters.ResetListener;
 import me.jimmyshaw.starlightgoals.adapters.SimpleTouchCallback;
 import me.jimmyshaw.starlightgoals.models.Goal;
@@ -73,7 +74,13 @@ public class ActivityMain extends AppCompatActivity {
     private DetailListener detailListener = new DetailListener() {
         @Override
         public void onClick(int position) {
-            showDialogCompleteThisGoal(position);
+            // Check to see if the goal at the clicked position is completed or not. Only show the
+            // dialog to mark a goal as completed if the goal is incomplete. If the goal is already
+            // complete then do nothing because there wouldn't be any point to show that dialog.
+            boolean isClickedGoalAlreadyComplete = realmResults.get(position).isCompleted();
+            if (!isClickedGoalAlreadyComplete) {
+                showDialogCompleteThisGoal(position);
+            }
         }
     };
 
@@ -81,6 +88,17 @@ public class ActivityMain extends AppCompatActivity {
         @Override
         public void onComplete(int position) {
             adapterGoals.completeThisGoal(position);
+        }
+    };
+
+    // We'd like to give the user the change to mark a goal as incomplete after it has been marked
+    // as completed. Instead of creating another detail layout, we'd like to feature the recycler
+    // view's long press functionality. When the user long presses on a completed goal, it will be
+    // marked as incomplete.
+    private IncompleteListener incompleteListener = new IncompleteListener() {
+        @Override
+        public void onIncomplete(int position) {
+            adapterGoals.markAsIncomplete(position);
         }
     };
 
@@ -171,7 +189,13 @@ public class ActivityMain extends AppCompatActivity {
         recyclerView.hideIfEmpty(toolbar);
         recyclerView.showIfEmpty(viewEmptyGoals);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapterGoals = new AdapterGoals(this, realm, realmResults, addListener, detailListener, resetListener);
+        adapterGoals = new AdapterGoals(this,
+                realm,
+                realmResults,
+                addListener,
+                detailListener,
+                resetListener,
+                incompleteListener);
         // To have animations with our row items, we set this field to true. The stable id is what's
         // returned in the adapter's getItemId method and that id will be used with the recycler
         // view's setItemAnimator. We're using the default animation but we could pass in other

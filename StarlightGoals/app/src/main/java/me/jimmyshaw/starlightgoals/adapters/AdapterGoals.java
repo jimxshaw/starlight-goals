@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,6 +37,7 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private AddListener addListener;
     private DetailListener detailListener;
     private ResetListener resetListener;
+    private IncompleteListener incompleteListener;
 
     private int filterOption;
 
@@ -55,7 +57,8 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         RealmResults<Goal> realmResults,
                         AddListener addListener,
                         DetailListener detailListener,
-                        ResetListener resetListener) {
+                        ResetListener resetListener,
+                        IncompleteListener incompleteListener) {
         // Since the update method uses the context, the context must be assigned prior to calling the
         // update method.
         this.context = context;
@@ -65,6 +68,7 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.addListener = addListener;
         this.detailListener = detailListener;
         this.resetListener = resetListener;
+        this.incompleteListener = incompleteListener;
     }
 
     public void update(RealmResults<Goal> realmResults) {
@@ -103,6 +107,15 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             realmResults.get(position).setCompleted(true);
             realm.commitTransaction();
             // Refreshes the data set.
+            notifyItemChanged(position);
+        }
+    }
+
+    public void markAsIncomplete(int position) {
+        if (position < realmResults.size()) {
+            realm.beginTransaction();
+            realmResults.get(position).setCompleted(false);
+            realm.commitTransaction();
             notifyItemChanged(position);
         }
     }
@@ -165,7 +178,7 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         else {
             View view = inflater.inflate(R.layout.recycler_view_row_goal, parent, false);
 
-            return new GoalHolder(view, detailListener);
+            return new GoalHolder(view, detailListener, incompleteListener);
         }
 
     }
@@ -216,7 +229,8 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
 
-    public static class GoalHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class GoalHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener, View.OnLongClickListener {
 
         @BindView(R.id.text_view_goal_text)
         TextView textViewGoalText;
@@ -228,16 +242,20 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         private View itemView;
 
-        private DetailListener listener;
+        private DetailListener detailListener;
+        private IncompleteListener incompleteListener;
 
-        public GoalHolder(View itemView, DetailListener detailListener) {
+        public GoalHolder(View itemView, DetailListener detailListener, IncompleteListener incompleteListener) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
             context = itemView.getContext();
             this.itemView = itemView;
-            listener = detailListener;
+            this.detailListener = detailListener;
+            this.incompleteListener = incompleteListener;
+
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
 
             // Set a different font for our row item text widgets.
             AppStarlightGoals.setWidgetTypeface(context, textViewGoalText, textViewDateDue);
@@ -274,7 +292,13 @@ public class AdapterGoals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         @Override
         public void onClick(View view) {
-            listener.onClick(getAdapterPosition());
+            detailListener.onClick(getAdapterPosition());
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            incompleteListener.onIncomplete(getAdapterPosition());
+            return true;
         }
     }
 
