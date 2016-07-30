@@ -7,21 +7,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-
-import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import me.jimmyshaw.starlightgoals.models.Goal;
 import me.jimmyshaw.starlightgoals.widgets.CustomDatePickerView;
 
 public class DialogAddAGoal extends DialogFragment {
+
+    // As we bind views with Butterknife, we must subsequently unbind them with the Unbinder. Unbinding
+    // takes place in a fragment's onDestroyView.
+    private Unbinder unbinder;
 
     @BindView(R.id.image_button_close)
     ImageButton imageButtonClose;
@@ -66,7 +67,7 @@ public class DialogAddAGoal extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_add_a_goal, container, false);
 
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
 
         return view;
     }
@@ -82,7 +83,6 @@ public class DialogAddAGoal extends DialogFragment {
         long dateAdded = System.currentTimeMillis();
 
 
-
         // To use Realm, we have to configure it and then add the configuration to a Realm instance.
         // Since we already configured Realm on start up in the Application configuration class we can
         // simply get a Realm instance without issue.
@@ -94,5 +94,11 @@ public class DialogAddAGoal extends DialogFragment {
         realm.commitTransaction();
         realm.close();
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

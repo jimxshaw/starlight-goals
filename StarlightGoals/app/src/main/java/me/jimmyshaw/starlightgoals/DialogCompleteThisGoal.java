@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import me.jimmyshaw.starlightgoals.adapters.CompleteListener;
 
 public class DialogCompleteThisGoal extends DialogFragment {
@@ -19,6 +20,10 @@ public class DialogCompleteThisGoal extends DialogFragment {
     public static final String ARG_POSITION = "POSITION";
 
     private CompleteListener completeListener;
+
+    // As we bind views with Butterknife, we must subsequently unbind them with the Unbinder. Unbinding
+    // takes place in a fragment's onDestroyView.
+    private Unbinder unbinder;
 
     @BindView(R.id.image_button_close)
     ImageButton buttonClose;
@@ -72,7 +77,7 @@ public class DialogCompleteThisGoal extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_complete_this_goal, container, false);
 
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
 
         return view;
     }
@@ -80,5 +85,11 @@ public class DialogCompleteThisGoal extends DialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }
