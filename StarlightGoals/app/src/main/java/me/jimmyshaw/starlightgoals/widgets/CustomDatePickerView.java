@@ -409,5 +409,5 @@ public class CustomDatePickerView extends LinearLayout implements View.OnTouchLi
         // false for no.
         return true;
     }
-    
+
 }

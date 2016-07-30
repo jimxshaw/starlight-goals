@@ -36,6 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/text_view_title"
+            android:background="@drawable/background_edit_text_add_a_goal"
             android:hint="@string/hint"
             android:padding="@dimen/edit_text_add_a_goal_padding"
             android:singleLine="true"/>
@@ -53,8 +54,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/date_picker"
+            android:background="@drawable/background_button_add_a_goal"
             android:text="@string/string_add_goal"
-            android:textAllCaps="false"/>
+            android:textAllCaps="false"
+            android:textSize="@dimen/button_add_a_goal_text_size"/>
 
     </RelativeLayout>
 </ScrollView>
