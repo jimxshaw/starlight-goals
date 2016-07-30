@@ -11,7 +11,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -171,9 +170,12 @@ public class CustomDatePickerView extends LinearLayout implements View.OnTouchLi
                     // sending a new message to be processed.
                     handler.removeMessages(MESSAGE_WHAT);
                     handler.sendEmptyMessageDelayed(MESSAGE_WHAT, DELAY);
+                    // Change the drawable color by calling the toggleDrawableColor method.
+                    toggleDrawableColor(textView, true);
                 }
                 if (isActionUpOrCancel(motionEvent)) {
                     increment = false;
+                    toggleDrawableColor(textView, false);
                 }
             }
             else if (wasBottomDrawableClicked(textView, boundsBottom.height(), x, y)) {
@@ -183,9 +185,11 @@ public class CustomDatePickerView extends LinearLayout implements View.OnTouchLi
                     decrement(textView.getId());
                     handler.removeMessages(MESSAGE_WHAT);
                     handler.sendEmptyMessageDelayed(MESSAGE_WHAT, DELAY);
+                    toggleDrawableColor(textView, true);
                 }
                 if (isActionUpOrCancel(motionEvent)) {
                     decrement = false;
+                    toggleDrawableColor(textView, false);
                 }
             }
             else {
@@ -193,6 +197,7 @@ public class CustomDatePickerView extends LinearLayout implements View.OnTouchLi
                 // nothing will happen but if we wanted to perform a functionality, we'd put that here.
                 increment = false;
                 decrement = false;
+                toggleDrawableColor(textView, false);
 
             }
         }
@@ -230,6 +235,25 @@ public class CustomDatePickerView extends LinearLayout implements View.OnTouchLi
         int ymin = ymax - drawableHeight;
 
         return x > xmin && x < xmax && y > ymin && y < ymax;
+    }
+
+    // By clicking or holding the top or bottom button drawable on our date picker widget, we want
+    // the drawable to change color as a signal to the user that it is in a clicked state.
+    private void toggleDrawableColor(TextView textView, boolean isClicked) {
+        if (isClicked) {
+            if (increment) {
+                // Left, Up, Right, Down - regions of our textView. If increment, our top region will
+                // changed to a pressed state while the bottom region remains unchanged. The left and
+                // right regions were 0 to being with so they'll stay that way.
+                textView.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.custom_date_picker_up_pressed, 0, R.drawable.custom_date_picker_down_normal);
+            }
+            if (decrement) {
+                textView.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.custom_date_picker_up_normal, 0, R.drawable.custom_date_picker_down_pressed);
+            }
+        }
+        else {
+            textView.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.custom_date_picker_up_normal, 0, R.drawable.custom_date_picker_down_normal);
+        }
     }
 
     private boolean isActionDown(MotionEvent motionEvent) {
