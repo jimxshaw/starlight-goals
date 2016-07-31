@@ -1,5 +1,8 @@
 package me.jimmyshaw.starlightgoals;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -27,6 +30,7 @@ import me.jimmyshaw.starlightgoals.adapters.IncompleteListener;
 import me.jimmyshaw.starlightgoals.adapters.ResetListener;
 import me.jimmyshaw.starlightgoals.adapters.SimpleTouchCallback;
 import me.jimmyshaw.starlightgoals.models.Goal;
+import me.jimmyshaw.starlightgoals.services.ServiceNotification;
 import me.jimmyshaw.starlightgoals.utilities.CustomRecyclerViewDivider;
 import me.jimmyshaw.starlightgoals.widgets.CustomRecyclerView;
 
@@ -207,6 +211,11 @@ public class ActivityMain extends AppCompatActivity {
         SimpleTouchCallback simpleTouchCallback = new SimpleTouchCallback(adapterGoals);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent(this, ServiceNotification.class);
+        PendingIntent pendingIntent = PendingIntent.getService(this, 101, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 1000, 5000, pendingIntent);
 
     }
 
