@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,15 +34,27 @@ public class DialogAddAGoal extends DialogFragment {
     @OnClick({R.id.image_button_close, R.id.button_add_goal})
     public void onButtonClick(View view) {
         int id = view.getId();
+        boolean isEditTextEmpty;
 
         switch (id) {
             case R.id.button_add_goal:
-                performAddAction();
+                isEditTextEmpty = performAddAction();
                 break;
+            case R.id.image_button_close:
+                dismiss();
+                return;
+            default:
+                dismiss();
+                return;
         }
 
-        // Exits the entire Add a Goal dialog.
-        dismiss();
+        if (isEditTextEmpty) {
+            Toast.makeText(getContext(), "Text field cannot be empty", Toast.LENGTH_LONG).show();
+        }
+        else {
+            dismiss();
+        }
+
     }
 
     @BindView(R.id.edit_text_add_a_goal)
@@ -79,23 +92,30 @@ public class DialogAddAGoal extends DialogFragment {
         AppStarlightGoals.setWidgetTypeface(view.getContext(), editTextAddAGoal);
     }
 
-    private void performAddAction() {
+    private boolean performAddAction() {
         // Get the value of the goal. Get the time of when it was added.
         String goalText = editTextAddAGoal.getText().toString();
-        long dateAdded = System.currentTimeMillis();
 
+        // We only add the goal to the database if the edit text field is not empty. We return false
+        // to specify that it's not empty.
+        if (!goalText.isEmpty()) {
+            long dateAdded = System.currentTimeMillis();
+            // To use Realm, we have to configure it and then add the configuration to a Realm instance.
+            // Since we already configured Realm on start up in the Application configuration class we can
+            // simply get a Realm instance without issue.
+            Realm realm = Realm.getDefaultInstance();
+            Goal goal = new Goal(dateAdded, datePicker.getTime(), goalText, false);
+            // Since copyToRealm is a write instruction, it must be used with a transaction.
+            realm.beginTransaction();
+            realm.copyToRealm(goal);
+            realm.commitTransaction();
+            realm.close();
 
-        // To use Realm, we have to configure it and then add the configuration to a Realm instance.
-        // Since we already configured Realm on start up in the Application configuration class we can
-        // simply get a Realm instance without issue.
-        Realm realm = Realm.getDefaultInstance();
-        Goal goal = new Goal(dateAdded, datePicker.getTime(), goalText, false);
-        // Since copyToRealm is a write instruction, it must be used with a transaction.
-        realm.beginTransaction();
-        realm.copyToRealm(goal);
-        realm.commitTransaction();
-        realm.close();
+            return false;
+        }
 
+        // If the user input edit text is empty then we return true.
+        return true;
     }
 
     @Override
